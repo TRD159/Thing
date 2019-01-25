@@ -25,8 +25,8 @@ public class ClientMain
 		
 		//PlayerInt myAIasRed = new HumanPlayer('R',"Tully");
 		//PlayerInt myAIasBlue = new HumanPlayer('B',"Tully");
-		Player myAIasRed = new RandomComputer('R');
-		Player myAIasBlue = new RandomComputer('B');
+		Player myAIasRed = new TRD1123('R');
+		Player myAIasBlue = new TRD1123('B');
 		String myAI_Name = myAIasRed.getName();
 		String opponentName = "";
 		Player currentlyPlaying = null;
