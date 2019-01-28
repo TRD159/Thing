@@ -12,7 +12,7 @@ public class Board
     int timer = 0;
     char winner = '-'; // 'R', '-', 'B', 'T'
     String winType ="";
-    int needed=5;
+    int needed=6;
     Color redWin = Color.red, blueWin = Color.blue;
 
     public Board()
@@ -180,6 +180,7 @@ public class Board
                     break;
             return placedAt;
         }
+
 
 // diagonals on the x-plane
     // both increasing
@@ -504,7 +505,7 @@ public class Board
             if(board[m.getZ()][y][m.getX()]=='-')
             {
                 board[m.getZ()][y][m.getX()] = c;
-                placedAt =  new Location(m.getX(),y,m.getX());
+                placedAt =  new Location(m.getX(),y,m.getZ());
                 break;
             }
         return placedAt;

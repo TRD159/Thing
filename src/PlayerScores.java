@@ -10,7 +10,7 @@ public class PlayerScores
 	private final int POINTS_FOR_LOSS	= 0;
 	
 	/* Pre:		None
-	 * Post: 	sets wins, losses, cats to 0 */
+	 * Post: 	sets wins, lossses, cats to 0 */
 	public PlayerScores()
 	{}
 	

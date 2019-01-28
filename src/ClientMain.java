@@ -6,14 +6,14 @@ import java.util.*;
 public class ClientMain
 {
 	public static final String ip = "T308030";
-	//public static final String ip = "127.0.0.1";
 	public static final int port = 8003;
 	
-	public static int moveSleepTime 		= 500;
-	public static int endSleepTime 			= 3000;
+	public static int moveSleepTime 		= 0;
+	public static int endSleepTime 			= 5000;
 	public static int matchInfoSleepTime 	= 0;
 	public static PlayerScores scores=null;
-
+	
+	
 	public static void main(String[] args)
 	{
 		Scanner keyboard = new Scanner(System.in);
@@ -25,8 +25,8 @@ public class ClientMain
 		
 		//PlayerInt myAIasRed = new HumanPlayer('R',"Tully");
 		//PlayerInt myAIasBlue = new HumanPlayer('B',"Tully");
-		Player myAIasRed = new TRD1123('R');
-		Player myAIasBlue = new TRD1123('B');
+		Player myAIasRed = new RandomComputer('R');
+		Player myAIasBlue = new RandomComputer('B');
 		String myAI_Name = myAIasRed.getName();
 		String opponentName = "";
 		Player currentlyPlaying = null;
