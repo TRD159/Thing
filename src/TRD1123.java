@@ -33,6 +33,7 @@ public class TRD1123 extends Player {
         }
         return bestMove;//returns what boardGrader's best score is-VK
     }
+
     /*
     HOW TO MAKE GRADER:(hyphen indicates completion)
     Double for loop, x and z-
@@ -53,11 +54,9 @@ public class TRD1123 extends Player {
         for(int x=0;x<board.getBoard().length;x++) {
             for (int z=0;z<board.getBoard().length;z++) {
                 /*Will go through the current instance (called in getMove) of the board. Checks through the board, and finds the grade. I'm thinking that we should
-                check the board based on our occurrences to win. (We would only go four deep) Whichever has the most occurrences to win, we count as the best, return that score, then put that move as the getMove (already done in getMove)
+                check the board based on our occurrences to win. (We would only go four scenarios deep) Whichever has the most occurrences to win, we count as the best, return that score, then put that move as the getMove (already done in getMove)
                  -VK
                  */
-
-                
 
             }
         }
