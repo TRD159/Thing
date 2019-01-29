@@ -4,7 +4,9 @@ public class TRD1123 extends Player {
     private char letter;
     private String name;
     private Move bestMove=null;
-
+    public static final char EMPTY = '-', RED = 'R', BLUE = 'B', PLAYING = '-', TIE = 'T';
+    public static final int X_SIZE=8,Y_SIZE=7, Z_SIZE = 8;
+    char[][][]board;
     public TRD1123(char letter)
     {
         super("TRD1123",letter);
@@ -15,6 +17,7 @@ public class TRD1123 extends Player {
      */
 
     public Move getMove(Board board) {
+        this.board=board.getBoard();
         int lastScore=0;
         for(int z=0;z<board.getBoard().length;z++) {
             for (int x=0; x< board.getBoard()[0][0].length;x++) {
@@ -51,20 +54,21 @@ public class TRD1123 extends Player {
 
 
     public int boardGrader(Board board){
-        for(int x=0;x<board.getBoard().length;x++) {
-            for (int z=0;z<board.getBoard().length;z++) {
-                /*Will go through the current instance (called in getMove) of the board. Checks through the board, and finds the grade. I'm thinking that we should
-                check the board based on our occurrences to win. (We would only go four scenarios deep) Whichever has the most occurrences to win, we count as the best, return that score, then put that move as the getMove (already done in getMove)
-                 -VK
-                 */
-
+        for(int z=0;z<board.getBoard().length;z++) {
+            for (int y=0;y<board.getBoard().length;y++) {
+                for(int x=0;x<board.getBoard().length;x++) {
+                    /*Will go through the current instance (called in getMove) of the board. Checks through the board, and finds the grade. I'm thinking that we should
+                    check the board based on our occurrences to win. (We would only go four scenarios deep) Whichever has the most occurrences to win, we count as the best,
+                    return that score, then put that move as the getMove (already done in getMove)
+                    -VK*/
+                }
             }
         }
         return 0;
     }
 
-    public Player freshCopy()
-    {
+
+    public Player freshCopy() {
         return new RandomComputer(letter);
     }
 }
