@@ -54,13 +54,64 @@ public class TRD1123 extends Player {
 
 
     public int boardGrader(Board board){
+        int score = 0;
+        int count = 0;
+
         for(int z=0;z<board.getBoard().length;z++) {
-            for (int y=0;y<board.getBoard().length;y++) {
+            for (int y=0;y<board.getBoard()[0].length;y++) {
                 for(int x=0;x<board.getBoard().length;x++) {
+                    int lz = board.getBoard().length;
+                    int lx = lz;
+                    int ly = board.getBoard()[0].length;
                     /*Will go through the current instance (called in getMove) of the board. Checks through the board, and finds the grade. I'm thinking that we should
                     check the board based on our occurrences to win. (We would only go four scenarios deep) Whichever has the most occurrences to win, we count as the best,
                     return that score, then put that move as the getMove (already done in getMove)
                     -VK*/
+
+                    //You remember how we coded win checks? We're gonna do that, except with scoring.
+                    //I made a few examples for you. We're gonna be coding these together, in this format. -RK
+
+                    if(board.getBoard()[z][y][x] != EMPTY) {
+                        for(int xx = x; xx < board.getBoard()[0][0].length; xx++) {
+                            if(board.getBoard()[z][y][xx] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+
+                        for(int yy = y; yy < board.getBoard()[0].length; yy++) {
+                            if(board.getBoard()[z][yy][x] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+
+                        for(int zz = z; zz < board.getBoard().length; zz++) {
+                            if(board.getBoard()[zz][y][x] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+
+                        for(int zx = 0; zx + z < lz && zx + x < lx; zx++) {
+                            if(board.getBoard()[z + zx][y][x + zx] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+                    }
                 }
             }
         }
