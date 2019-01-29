@@ -71,6 +71,11 @@ public class TRD1123 extends Player {
                     //You remember how we coded win checks? We're gonna do that, except with scoring.
                     //I made a few examples for you. We're gonna be coding these together, in this format. -RK
 
+                    //Got it. I will work through this and begin to understand. I had to delete my clone
+                    // on my computer, so I could actually work...but hey we're good, so yay
+
+                    //TODO 1/29/19- work on finding a different event for TSA, bc my dad said no for drone.... and this entire project but, you know,
+
                     if(board.getBoard()[z][y][x] != EMPTY) {
                         for(int xx = x; xx < board.getBoard()[0][0].length; xx++) {
                             if(board.getBoard()[z][y][xx] == letter) {
@@ -79,7 +84,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += (int)Math.pow(10, count - 1);
+                        score += (int)(Math.pow(10, count - 1));
                         count = 0;
 
                         for(int yy = y; yy < board.getBoard()[0].length; yy++) {
@@ -111,6 +116,30 @@ public class TRD1123 extends Player {
                         }
                         score += (int)Math.pow(10, count - 1);
                         count = 0;
+
+                        for(int yx=0;yx+y<ly && yx+x<lx; yx++) {
+                            if(board.getBoard()[z][y+yx][x+yx] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+
+                        for(int yz=0;yz+y<ly && yz+z<lz; yz++) {
+                            if(board.getBoard()[z+yz][y+yz][x] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        score += (int)Math.pow(10, count - 1);
+                        count = 0;
+
+
                     }
                 }
             }
