@@ -53,13 +53,13 @@ public class TRD1123 extends Player {
 
 
 
-    public int boardGrader(Board board){
+    public int boardGrader(Board board) {
         int score = 0;
         int count = 0;
 
-        for(int z=0;z<board.getBoard().length;z++) {
-            for (int y=0;y<board.getBoard()[0].length;y++) {
-                for(int x=0;x<board.getBoard().length;x++) {
+        for (int z = 0; z < board.getBoard().length; z++) {
+            for (int y = 0; y < board.getBoard()[0].length; y++) {
+                for (int x = 0; x < board.getBoard().length; x++) {
                     int lz = board.getBoard().length;
                     int lx = lz;
                     int ly = board.getBoard()[0].length;
@@ -76,70 +76,161 @@ public class TRD1123 extends Player {
 
                     //TODO 1/29/19- work on finding a different event for TSA, bc my dad said no for drone.... and this entire project but, you know,
 
-                    if(board.getBoard()[z][y][x] != EMPTY) {
-                        for(int xx = x; xx < board.getBoard()[0][0].length; xx++) {
-                            if(board.getBoard()[z][y][xx] == letter) {
+                    if (board.getBoard()[z][y][x] != EMPTY) {
+                        for (int xx = x; xx < board.getBoard()[0][0].length; xx++) {
+                            if (board.getBoard()[z][y][xx] == letter) {
                                 count++;
                             } else {
                                 break;
                             }
                         }
-                        score += (int)(Math.pow(10, count - 1));
+                        score += (int) (Math.pow(10, count - 1));
                         count = 0;
 
-                        for(int yy = y; yy < board.getBoard()[0].length; yy++) {
-                            if(board.getBoard()[z][yy][x] == letter) {
+                        for (int yy = y; yy < board.getBoard()[0].length; yy++) {
+                            if (board.getBoard()[z][yy][x] == letter) {
                                 count++;
                             } else {
                                 break;
                             }
                         }
-                        score += (int)Math.pow(10, count - 1);
+                        score += (int) Math.pow(10, count - 1);
                         count = 0;
 
-                        for(int zz = z; zz < board.getBoard().length; zz++) {
-                            if(board.getBoard()[zz][y][x] == letter) {
+                        for (int zz = z; zz < board.getBoard().length; zz++) {
+                            if (board.getBoard()[zz][y][x] == letter) {
                                 count++;
                             } else {
                                 break;
                             }
                         }
-                        score += (int)Math.pow(10, count - 1);
+                        score += (int) Math.pow(10, count - 1);
                         count = 0;
 
-                        for(int zx = 0; zx + z < lz && zx + x < lx; zx++) {
-                            if(board.getBoard()[z + zx][y][x + zx] == letter) {
+                        for (int zx = 0; zx + z < lz && zx + x < lx; zx++) {
+                            if (board.getBoard()[z + zx][y][x + zx] == letter) {
                                 count++;
                             } else {
                                 break;
                             }
                         }
-                        score += (int)Math.pow(10, count - 1);
+                        score += (int) Math.pow(10, count - 1);
                         count = 0;
 
-                        for(int yx=0;yx+y<ly && yx+x<lx; yx++) {
-                            if(board.getBoard()[z][y+yx][x+yx] == letter) {
-                                count++;
-                            } else {
-                                break;
-                            }
-                        }
-
-                        score += (int)Math.pow(10, count - 1);
-                        count = 0;
-
-                        for(int yz=0;yz+y<ly && yz+z<lz; yz++) {
-                            if(board.getBoard()[z+yz][y+yz][x] == letter) {
+                        for (int yx = 0; yx + y < ly && yx + x < lx; yx++) {
+                            if (board.getBoard()[z][y + yx][x + yx] == letter) {
                                 count++;
                             } else {
                                 break;
                             }
                         }
 
-                        score += (int)Math.pow(10, count - 1);
+                        score += (int) Math.pow(10, count - 1);
                         count = 0;
 
+                        for (int yz = 0; yz + y < ly && yz + z < lz; yz++) {
+                            if (board.getBoard()[z + yz][y + yz][x] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
 
+                        score += (int) Math.pow(10, count - 1);
+                        count = 0;
+
+                        for (int xyz = 0; xyz + y < ly && xyz + z < lz && xyz + x < lx; xyz++) {
+                            if (board.getBoard()[z + xyz][y + xyz][x + xyz] == letter) {
+                                count++;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        score += (int) Math.pow(10, count - 1);
+                        count = 0;
+
+                        //MINUSSSSSSSsdjif j;asd fj;lasd]fa]j sdj faksldjf aksldjfkljh
+                        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                        //MINUS GUYS LETS DO MINUSSWWSSSSDlji hadsgmhfasdbyfse yhdf
+                        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+                        if (board.getBoard()[z][y][x] != EMPTY) {
+                            for (int xx = x; xx >= 0; xx--) {
+                                if (board.getBoard()[z][y][xx] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            score += (int) (Math.pow(10, count - 1));
+                            count = 0;
+
+                            for (int yy = y; yy >= 0; yy--) {
+                                if (board.getBoard()[z][yy][x] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+                            for (int zz = z; zz >= 0; zz--) {
+                                if (board.getBoard()[zz][y][x] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+                            for (int zxm = 0; z - zxm >= 0 && x - zxm >= 0; zxm++) {
+                                if (board.getBoard()[z - zxm][y][x - zxm] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+                            for (int yxm = 0; y - yxm >= 0 && x - yxm >= 0; yxm++) {
+                                if (board.getBoard()[z][y - yxm][x - yxm] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+                            for (int yz = 0; yz + y < ly && yz + z < lz; yz++) {
+                                if (board.getBoard()[z + yz][y + yz][x] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+                            for (int xyz = 0; xyz + y < ly && xyz + z < lz && xyz + x < lx; xyz++) {
+                                if (board.getBoard()[z + xyz][y + xyz][x + xyz] == letter) {
+                                    count++;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            score += (int) Math.pow(10, count - 1);
+                            count = 0;
+
+
+                        }
                     }
                 }
             }
@@ -149,6 +240,6 @@ public class TRD1123 extends Player {
 
 
     public Player freshCopy() {
-        return new RandomComputer(letter);
+        return new TRD1123(letter);
     }
 }
