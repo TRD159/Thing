@@ -99,7 +99,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += ((int) (Math.pow(10, count - 1)));
+                        score+= count;
                         count = 0;
 
                         for (int yy = y; yy < board.getBoard()[0].length; yy++) {
@@ -109,7 +109,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                       score+= count
+                       score+= count;
                         count = 0;
 
                         for (int zz = z; zz < board.getBoard().length; zz++) {
@@ -119,7 +119,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += (int) Math.pow(10, count - 1);
+                        score+= count;
                         count = 0;
 
                         for (int zx = 0; zx + z < lz && zx + x < lx; zx++) {
@@ -129,7 +129,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += (int) Math.pow(10, count - 1);
+                        score+= count;
                         count = 0;
 
                         for (int yx = 0; yx + y < ly && yx + x < lx; yx++) {
@@ -140,7 +140,7 @@ public class TRD1123 extends Player {
                             }
                         }
 
-                        score += (int) Math.pow(10, count - 1);
+                        score+= count;
                         count = 0;
 
                         for (int yz = 0; yz + y < ly && yz + z < lz; yz++) {
@@ -151,7 +151,7 @@ public class TRD1123 extends Player {
                             }
                         }
 
-                        score += (int) Math.pow(10, count - 1);
+                        score+= count;
                         count = 0;
 
                         for (int xyz = 0; xyz + y < ly && xyz + z < lz && xyz + x < lx; xyz++) {
@@ -162,7 +162,7 @@ public class TRD1123 extends Player {
                             }
                         }
 
-                        score += (int) Math.pow(10, count - 1);
+                        
                         count = 0;
 
                         //MINUSSSSSSSsdjif j;asd fj;lasd]fa]j sdj faksldjf aksldjfkljh
@@ -188,7 +188,7 @@ public class TRD1123 extends Player {
                                     break;
                                 }
                             }
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
                             for (int zz = z; zz >= 0; zz--) {
@@ -198,7 +198,7 @@ public class TRD1123 extends Player {
                                     break;
                                 }
                             }
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
                             for (int zxm = 0; z - zxm >= 0 && x - zxm >= 0; zxm++) {
@@ -208,7 +208,7 @@ public class TRD1123 extends Player {
                                     break;
                                 }
                             }
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
                             for (int yxm = 0; y - yxm >= 0 && x - yxm >= 0; yxm++) {
@@ -219,7 +219,7 @@ public class TRD1123 extends Player {
                                 }
                             }
 
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
                             for (int yz = 0; yz + y < ly && yz + z < lz; yz++) {
@@ -230,7 +230,7 @@ public class TRD1123 extends Player {
                                 }
                             }
 
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
                             for (int xyz = 0; xyz + y < ly && xyz + z < lz && xyz + x < lx; xyz++) {
@@ -241,7 +241,7 @@ public class TRD1123 extends Player {
                                 }
                             }
 
-                            score += (int) Math.pow(10, count - 1);
+                            score+= count;
                             count = 0;
 
 
