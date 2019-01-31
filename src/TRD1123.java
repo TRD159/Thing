@@ -9,7 +9,7 @@ public class TRD1123 extends Player {
     char[][][]board;
     public TRD1123(char letter)
     {
-        super("TRD1123",letter);
+        super("Sig",letter);
     }
 
     /*
