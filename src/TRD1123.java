@@ -22,6 +22,7 @@ public class TRD1123 extends Player {
     public Move getMove(Board board) {
         this.board=board.getBoard();
         int lastScore=0;
+        //Move lastMove = null;
         for(int z=0;z<board.getBoard().length;z++) {
             for (int x=0; x< board.getBoard()[0][0].length;x++) {
                 if(z==0&&x==0) {//checks to see if its the first iteration, then sets that to bestMove for comparison-VK
@@ -31,8 +32,15 @@ public class TRD1123 extends Player {
                     board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
                 if(boardGrader(board)>=lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardGrader(board)-VK
-                    bestMove=new Move(x,z);
-                    lastScore=boardGrader(board);
+                    //lastMove = new Move(x, z);
+                    if(x < board.getBoard().length) {
+                        if(z < board.getBoard().length) {
+                            if(board.getBoard()[x][6][z] != '-') {
+                                bestMove=new Move(x,z);
+                                lastScore=boardGrader(board);
+                            }
+                        }
+                    }
                 }
                 else {
                     board.setLocation(board.makeMoveNoCheck(new Move(x,z),board.EMPTY),board.EMPTY);
@@ -41,6 +49,8 @@ public class TRD1123 extends Player {
         }
         return bestMove;//returns what boardGrader's best score is-VK
     }
+
+    /*Idea: Code a new method to gauge the priority of a move. Horizontal has the highest priority, then vertical, then diagonal, then special diagonal.*/
 
     /*
     HOW TO MAKE GRADER:(hyphen indicates completion)
@@ -87,7 +97,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += (int) (Math.pow(10, count - 1));
+                        score += ((int) (Math.pow(10, count - 1)));
                         count = 0;
 
                         for (int yy = y; yy < board.getBoard()[0].length; yy++) {
