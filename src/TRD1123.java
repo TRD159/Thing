@@ -9,7 +9,7 @@ public class TRD1123 extends Player {
     char[][][]board;
     public TRD1123(char letter)
     {
-        super("Sig",letter);
+        super("Craig",letter);
     }
 
     /*
@@ -22,6 +22,7 @@ public class TRD1123 extends Player {
     public Move getMove(Board board) {
         this.board=board.getBoard();
         int lastScore=0;
+        Location location=null;
         //Move lastMove = null;
         for(int z=0;z<board.getBoard().length;z++) {
             for (int x=0; x< board.getBoard()[0][0].length;x++) {
@@ -29,10 +30,13 @@ public class TRD1123 extends Player {
                     bestMove=new Move(x,z);
                 }
                 if(!(board.isFull(new Move(x,z)))) {
-                    board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
+                    location=board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
+                System.out.println(x+", "+z+":"+boardGrader(board));
                 if(boardGrader(board)>=lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardGrader(board)-VK
-                    //lastMove = new Move(x, z);
+                    //lastMove = new Move(x, z)
+                    board.setLocation(location, board.EMPTY);
+
                     if(x < board.getBoard().length) {
                         if(z < board.getBoard().length) {
                             if(board.getBoard()[x][6][z] != '-') {
@@ -42,9 +46,7 @@ public class TRD1123 extends Player {
                         }
                     }
                 }
-                else {
-                    board.setLocation(board.makeMoveNoCheck(new Move(x,z),board.EMPTY),board.EMPTY);
-                }
+
             }
         }
         return bestMove;//returns what boardGrader's best score is-VK
@@ -107,7 +109,7 @@ public class TRD1123 extends Player {
                                 break;
                             }
                         }
-                        score += (int) Math.pow(10, count - 1);
+                       score+= count
                         count = 0;
 
                         for (int zz = z; zz < board.getBoard().length; zz++) {
@@ -248,7 +250,7 @@ public class TRD1123 extends Player {
                 }
             }
         }
-        return 0;
+        return score;
     }
 
 
