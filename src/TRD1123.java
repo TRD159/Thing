@@ -13,7 +13,10 @@ public class TRD1123 extends Player {
     }
 
     /*
-    TODO 1/28/19-WE need to finish boardGrader, check comments within the method for directions -VK
+    TODO: MAKE OUR MOVES BE NOT JUST UPWARD VERTICAL
+
+    TODO: MAKE SURE THAT OUR MOVES DONT GO OUT OF BOUNDS
+
      */
 
     public Move getMove(Board board) {
@@ -24,13 +27,15 @@ public class TRD1123 extends Player {
                 if(z==0&&x==0) {//checks to see if its the first iteration, then sets that to bestMove for comparison-VK
                     bestMove=new Move(x,z);
                 }
-                board.makeMove(new Move(x,z), letter);//drops piece into board for grading later-VK
+                if(!(board.isFull(new Move(x,z)))) {
+                    board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
+                }
                 if(boardGrader(board)>=lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardGrader(board)-VK
                     bestMove=new Move(x,z);
                     lastScore=boardGrader(board);
                 }
                 else {
-                    board.makeMove(new Move(x,z),'-');
+                    board.setLocation(board.makeMoveNoCheck(new Move(x,z),board.EMPTY),board.EMPTY);
                 }
             }
         }
@@ -61,7 +66,7 @@ public class TRD1123 extends Player {
             for (int y = 0; y < board.getBoard()[0].length; y++) {
                 for (int x = 0; x < board.getBoard().length; x++) {
                     int lz = board.getBoard().length;
-                    int lx = lz;
+                    int lx = board.getBoard()[0][0].length;
                     int ly = board.getBoard()[0].length;
                     /*Will go through the current instance (called in getMove) of the board. Checks through the board, and finds the grade. I'm thinking that we should
                     check the board based on our occurrences to win. (We would only go four scenarios deep) Whichever has the most occurrences to win, we count as the best,
@@ -73,8 +78,6 @@ public class TRD1123 extends Player {
 
                     //Got it. I will work through this and begin to understand. I had to delete my clone
                     // on my computer, so I could actually work...but hey we're good, so yay
-
-                    //TODO 1/29/19- work on finding a different event for TSA, bc my dad said no for drone.... and this entire project but, you know,
 
                     if (board.getBoard()[z][y][x] != EMPTY) {
                         for (int xx = x; xx < board.getBoard()[0][0].length; xx++) {
