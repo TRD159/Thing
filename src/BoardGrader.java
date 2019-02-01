@@ -221,9 +221,66 @@ return bestMove-
            checkYPZM(new Location(x,y,z),BLUE,0)||checkZPXP(new Location(x,y,z),BLUE,0)||checkZPXM(new Location(x,y,z),BLUE,0)||checkYPXP(new Location(x,y,z),BLUE,0)||checkYMXP(new Location(x,y,z),BLUE,0)||checkYMZP(new Location(x,y,z),BLUE,0)||checkYMZM(new Location(x,y,z),BLUE,0)
            ||checkYMZPXP(new Location(x,y,z),BLUE,0)||checkYPZMXP(new Location(x,y,z),BLUE,0)
            ||checkYPZPXM(new Location(x,y,z),BLUE,0)||checkYPZPXP(new Location(x,y,z),BLUE,0)*/
+
         return 0;
     }
 
+    //Very well. If you're making a scorer of your own, I will do the same. We can compare scorers to try to find new ideas.
+    public int otherScorer() {
+        int score = 0;
+        boolean[][][] checked = new boolean[8][7][8];
+        for(int z = 0; z < board.length; z++) {
+            for(int y = 0; y < board[0].length; y++) {
+                for(int x = 0; x < board.length; x++) {
+                    Location l = new Location(x, y, z);
+                    if(board[z][y][x] != EMPTY) {
+                        char c = board[z][y][x];
+                        score += (scorerHelper(l, 1, 0, 0, c)
+                         + scorerHelper(l, 0, 1, 0, c)
+                         + scorerHelper(l, 0, 0, 1, c)
+                         + scorerHelper(l, 1, 1, 0, c)
+                         + scorerHelper(l, -1, 1,0,  c)
+                         + scorerHelper(l, 1, 0, 1, c)
+                         + scorerHelper(l, 1, 0, -1, c)
+                         + scorerHelper(l, 0, 1, 1, c)
+                         + scorerHelper(l, 0, -1, 1, c)
+                         + scorerHelper(l, 1, 1, 1, c)
+                         + scorerHelper(l, 1, 1 ,-1, c)
+                         + scorerHelper(l, -1,1,1, c)
+                         + scorerHelper(l,-1,1,-1, c));
+                        /*score = (scorerHelper(l, 1, 0, 0, c)
+                         + scorerHelper(l, -1, 0, 0, c)
+                         + scorerHelper(l, 0, 1, 0, c)
+                         + scorerHelper(l, 0, -1, 0, c)
+                         + scorerHelper(l, 0, 0, 1, c)
+                         + scorerHelper(l, 0, 0, -1, c)
+                         + scorerHelper(l, 1, 1, 0, c)
+                         + scorerHelper(l, -1, 1, 0, c)
+                         + scorerHelper(l, 1, -1, 0, c)
+                         + scorerHelper(l, -1, -1, 0, c)
+                         + scorerHelper(l, 0, 1, 1, c)
+                         + scorerHelper(l, 0, 1, -1, c)
+                         + scorerHelper(l, 0, -1, 1, c)
+                         + scorerHelper(l, 0, -1, -1, c)
+                         + scorerHelper(l, 1, 0, 1, c)
+                         + scorerHelper(l, 1, 0, -1, c)
+                         + scorerHelper(l, -1, 0, 1, c)
+                         + scorerHelper(l, -1, 0, -1, c)
+                         + scorerHelper())*/
+                    }
+                }
+            }
+        }
+        return score;
+    }
+    public int scorerHelper(Location l, int x, int y, int z, char c) {
+        if((l.z >= 0 && l.z < board.length) && (l.y >= 0 && l.y < board[0].length) && (l.x >= 0 && l.x < board.length)) {
+            if (board[l.z + z][l.y + y][l.x + x] == c) {
+                return 10 * scorerHelper(new Location(l.x + x, l.y + y, l.z + z), x, y, z, c);
+            }
+        }
+        return 1;
+    }
     public int checkXP(Location l, char player, int x, int score) { //x starts off being 0
         if(l.x==X_SIZE) {
             return x;
