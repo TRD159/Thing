@@ -329,35 +329,25 @@ return bestMove-
     }
     public int checkYMZP(Location l, char player, int y) {
         if (l.y == 0||l.z==Z_SIZE) {
-            return 0;
+            return y;
         }
-        if (l.y > 0 && l.z <Z_SIZE&& y < 5) {
+        if (l.y > 0 && l.z <Z_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYMZP(cL(l,0, -1, 1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkYMZM(Location l, char player, int y) {
         if (l.y == 0||l.z==0) {
-            return 0;
+            return y;
         }
         if (l.y >=0 && l.z>=0&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYMZM(cL(l,0, -1, -1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
 
 

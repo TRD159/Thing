@@ -5,8 +5,8 @@ import java.util.*;
 
 public class ClientMain
 {
-	public static final String ip = "T308030";
-	public static final int port = 8003;
+	public static final String ip = "127.0.0.1";
+	public static final int port = 2869;
 	
 	public static int moveSleepTime 		= 0;
 	public static int endSleepTime 			= 100;
