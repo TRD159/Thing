@@ -7,6 +7,7 @@ public class TRD1123 extends Player {
     public static final char EMPTY = '-', RED = 'R', BLUE = 'B', PLAYING = '-', TIE = 'T';
     public static final int X_SIZE=8,Y_SIZE=7, Z_SIZE = 8;
     char[][][]board;
+    String score="";
     public TRD1123(char letter)
     {
         super("Craig",letter);
@@ -33,7 +34,7 @@ public class TRD1123 extends Player {
                     location=board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
                 BoardGrader boardGrader=new BoardGrader(board,location,letter,0,0);
-                System.out.println(x+", "+z+":"+boardGrader.boardScorer(board));
+                score=(x+", "+z+":"+boardGrader.boardScorer(board));
                 if(boardGrader.boardScorer(board)>lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardGrader(board)-VK
                     //lastMove = new Move(x, z)
                     if(location.x<X_SIZE&&location.y<Y_SIZE&&location.z<Z_SIZE) {
@@ -59,6 +60,10 @@ public class TRD1123 extends Player {
 
     public Player freshCopy() {
         return new TRD1123(letter);
+    }
+
+    public String getScore() {
+        return score;
     }
 
 
