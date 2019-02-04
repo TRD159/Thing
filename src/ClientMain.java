@@ -5,12 +5,12 @@ import java.util.*;
 
 public class ClientMain
 {
-	public static final String ip = "T308030";
+	public static final String ip = "127.0.0.1";
 	public static final int port = 8003;
 	
-	public static int moveSleepTime 		= 0;
-	public static int endSleepTime 			= 0;
-	public static int matchInfoSleepTime 	= 0;
+	public static int moveSleepTime 		= 300;
+	public static int endSleepTime 			= 300;
+	public static int matchInfoSleepTime 	= 300;
 	public static PlayerScores scores=null;
 	
 	

@@ -3,7 +3,7 @@ import java.util.Random;
 public class TRD1123 extends Player {
     private char letter;
     private String name;
-    private Move bestMove=null;
+    private Move bestMove=null, worstMove=null;
     public static final char EMPTY = '-', RED = 'R', BLUE = 'B', PLAYING = '-', TIE = 'T';
     public static final int X_SIZE=8,Y_SIZE=7, Z_SIZE = 8;
     char[][][]board;
@@ -39,6 +39,10 @@ public class TRD1123 extends Player {
                         bestMove = new Move(location.x, location.z);
                     }
                 }
+                else if(boardGrader.boardScorer(board)<lastScore) {
+                    soothsayer(board); //Finds the worst move that we can get, and gives it to us
+                }
+
                 lastScore = boardGrader.boardScorer(board);
                 if(location!=null) {
                     board.setLocation(location, Board.EMPTY);
@@ -63,6 +67,10 @@ public class TRD1123 extends Player {
 
     public String getScore() {
         return score;
+    }
+
+    public void soothsayer(Board board) {
+
     }
 
 
