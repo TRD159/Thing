@@ -216,13 +216,20 @@ return bestMove-
 //TODO: I AM GOING TO MAKE MY OWN VERSION OF BOARDGRADER() called BoardScorer(), using our old recursive methods so i can understand it
 
     public int boardScorer(Board board) {
-   /*
-   checkXP(new Location(x,y,z),BLUE,0)||checkYP(new Location(x,y,z),BLUE,0)||checkZP(new Location(x,y,z),BLUE,0)||checkXM(new Location(x,y,z),BLUE,0)||checkYM(new Location(x,y,z),BLUE,0)||checkZM(new Location(x,y,z),BLUE,0)||checkYPZP(new Location(x,y,z),BLUE,0)||
-           checkYPZM(new Location(x,y,z),BLUE,0)||checkZPXP(new Location(x,y,z),BLUE,0)||checkZPXM(new Location(x,y,z),BLUE,0)||checkYPXP(new Location(x,y,z),BLUE,0)||checkYMXP(new Location(x,y,z),BLUE,0)||checkYMZP(new Location(x,y,z),BLUE,0)||checkYMZM(new Location(x,y,z),BLUE,0)
-           ||checkYMZPXP(new Location(x,y,z),BLUE,0)||checkYPZMXP(new Location(x,y,z),BLUE,0)
-           ||checkYPZPXM(new Location(x,y,z),BLUE,0)||checkYPZPXP(new Location(x,y,z),BLUE,0)*/
+        int score=0;
 
-        return 0;
+        for (int z = 0; z < board.getBoard().length; z++) {
+            for (int y = 0; y < board.getBoard()[0].length; y++) {
+                for (int x = 0; x < board.getBoard().length; x++) {
+                    score = checkXP(new Location(x, y, z), letter, 0, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) + checkXM(new Location(x, y, z), letter, 0, 0) + checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) + checkYPZP(new Location(x, y, z), letter, 0) +
+                            checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
+                            + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
+                            + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
+                }
+            }
+        }
+        return score;
+
     }
 
     //Very well. If you're making a scorer of your own, I will do the same. We can compare scorers to try to find new ideas.
@@ -349,209 +356,146 @@ return bestMove-
         }
         return y;
     }
-
-
+    
     public int checkYPZM(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == 0) {
-            return 0;
+            return y;
         }
         if (l.y < Y_SIZE &&l.z>=0 &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZM(cL(l,0, 1, -1), player, ++y);
-            } else {
-                return 0;
+                return checkYPZM(cL(l, 0, 1, -1), player, ++y);
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkYMZPXP(Location l, char player, int y) {
         if (l.y == 0||l.z ==Z_SIZE||l.x==X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.y >=0 &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYMZPXP(cL(l,1, -1, 1), player, ++y);
-            } else {
-                return 0;
+                return checkYMZPXP(cL(l, 1, -1, 1), player, ++y);
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkYPZMXP(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == 0||l.x==X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.y < Y_SIZE &&l.z>=0 &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYPZMXP(cL(l,1, 1, -1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkYPZPXM(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == Z_SIZE||l.x==0) {
-            return 0;
+            return y;
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x>=0&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYPZPXM(cL(l,-1, 1, 1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkYPZPXP(Location l, char player, int y) {
         if (l.y== Y_SIZE||l.z == Z_SIZE||l.x == X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYPZPXP(cL(l,1, 1, 1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
 
     public int checkZPXP(Location l, char player, int y) {
         if (l.z == Z_SIZE||l.x==X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.z < Z_SIZE &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkZPXP(cL(l,1, 0, 1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
     public int checkZPXM(Location l, char player, int y) {
         if (l.x ==0||l.z==Z_SIZE) {
-            return 0;
+            return y;
         }
         if (l.x >=0 &&l.z<Z_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkZPXM(cL(l,-1, 0, 1), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
 
     public int checkYPXP(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.x==X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.y < Y_SIZE &&l.x<X_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYPXP(cL(l,1, 1, 0), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
 
 
     public int checkYMXP(Location l, char player, int y) {
         if (l.y == 0||l.x==X_SIZE) {
-            return 0;
+            return y;
         }
         if (l.y >=0 &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkYMXP(cL(l,1, -1, 0), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if (y == 5) {
-            return 0;
-        }
-        return 0;
+        return y;
     }
 
 
 
     public int checkYM(Location l, char player, int y) {
         if(l.y==Y_SIZE) {
-            return 0;
+            return y;
         }
         if(l.y >= 0 && y < 5) {
             if(board[l.z][l.y][l.x] == player) {
                 return checkYM(cL(l,0,-1,0), player, ++y);
-            } else {
-                return 0;
             }
         }
-        if(y==5) {
-            return 0;
-        }
 
-        return 0;
+        return y;
     }
     public int checkZP(Location l, char player, int z) {
         if(l.z==Z_SIZE) {
-            return 0;
+            return z;
         }
         if(l.z < Z_SIZE && z < 5) {
             if(board[l.z][l.y][l.x] == player) {
                 return checkZP(cL(l,0,0,1), player, ++z);
-            } else {
-                return 0;
             }
         }
-
-        if(z==5) {
-            return 0;
-        }
-        return 0;
+        return z;
     }
     public int checkZM(Location l, char player, int z) {
         if (l.z == 0) {
-            return 0;
+            return z;
         }
         if (l.z >= 0 && z < 5) {
             if (board[l.z][l.y][l.x] == player) {
                 return checkZM(cL(l, 0, 0, -1), player, ++z);
-            } else {
-                return 0;
-            }
+            } 
         }
-
-        if (z == 5) {
-            return 0;
-        }
-        return 0;
+        return z;
     }
 
     Location cL(Location l, int x, int y, int z) {
