@@ -24,38 +24,37 @@ public class TRD1123 extends Player {
         this.board=board.getBoard();
         int lastScore=0;
         Location location=null;
+        bestMove=new Move((int)Math.random()*7,(int)Math.random()*7);
         //Move lastMove = null;
         for(int z=0;z<board.getBoard().length;z++) {
             for (int x=0; x< board.getBoard()[0][0].length;x++) {
-                if(z==0&&x==0) {//checks to see if its the first iteration, then sets that to bestMove for comparison-VK
-                    bestMove=new Move(x,z);
-                }
                 if(!(board.isFull(new Move(x,z)))) {
                     location=board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
                 BoardGrader boardGrader=new BoardGrader(board,location,letter,0,0);
-                score=(x+", "+z+":"+boardGrader.boardScorer(board));
-                if(boardGrader.boardScorer(board)>lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardGrader(board)-VK
+                System.out.println(x+", "+z+":"+boardGrader.boardScorer(board));
+                if(boardGrader.boardScorer(board)>lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
                     //lastMove = new Move(x, z)
-                    if(location.x<X_SIZE&&location.y<Y_SIZE&&location.z<Z_SIZE) {
-                        board.setLocation(location, board.EMPTY);
+                    if (!board.isFull(new Move(x, z))) {
+                        bestMove = new Move(location.x, location.z);
                     }
-
-                    /*if(x < board.getBoard().length) {
-                        if(z < board.getBoard().length) {
-                            if(board.getBoard()[x][location.y][z] != '-') {
-                                bestMove=new Move(x,z);
-                                lastScore=boardGrader(board);
-                            }
-                        }
-                    }*/
                 }
-
+                lastScore = boardGrader.boardScorer(board);
+                if(location!=null) {
+                    board.setLocation(location, Board.EMPTY);
+                }
             }
         }
-        return bestMove;//returns what boardGrader's best score is-VK
+        if(!board.isFull(bestMove)){
+            return bestMove;//returns what boardGrader's best score is-VK
+        }
+        return null;
     }
 
+    //Todo 2/4/19
+    //TODO: Craig scored a 95 on his test today, punish him for me
+    //TODO: Why are our scores this low? All you need to do now is fix the boardScorer or otherScorer
+    //Its getting better
 
 
     public Player freshCopy() {

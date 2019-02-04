@@ -217,8 +217,8 @@ return bestMove-
 
 
     public int boardScorer(Board board) {
-        int score=0;
-
+        int score=0, finalScore=0;
+        int lastScore=3;
         for (int z = 0; z < board.getBoard().length; z++) {
             for (int y = 0; y < board.getBoard()[0].length; y++) {
                 for (int x = 0; x < board.getBoard().length; x++) {
@@ -226,10 +226,14 @@ return bestMove-
                             checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
                             + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
                             + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
+                    if(score>lastScore) {
+                        lastScore=score;
+                    }
                 }
             }
         }
-        return score;
+        finalScore=lastScore;
+        return finalScore;
 
     }
 
