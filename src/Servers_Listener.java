@@ -50,6 +50,9 @@ public class Servers_Listener implements Runnable
 		testingAIsAsRed.add(new RandomComputer('R'));
 		testingAIsAsBlue.add(new RandomComputer('B'));
 
+		testingAIsAsRed.add(new TRD1123('R'));
+		testingAIsAsBlue.add(new TRD1123('B'));
+
 
 
 		// Adds fourth Period AIs

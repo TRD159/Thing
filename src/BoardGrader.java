@@ -216,7 +216,7 @@ return bestMove-
 //TODO: I AM GOING TO MAKE MY OWN VERSION OF BOARDGRADER() called BoardScorer(), using our old recursive methods so i can understand it
 
 
-    public int boardScorer(Board board) {
+    public int boardScorer(Board board, char letter) {
         int score=0, finalScore=0;
         int lastScore=3;
         for (int z = 0; z < board.getBoard().length; z++) {
