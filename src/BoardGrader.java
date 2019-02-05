@@ -216,7 +216,7 @@ return bestMove-
 //TODO: I AM GOING TO MAKE MY OWN VERSION OF BOARDGRADER() called BoardScorer(), using our old recursive methods so i can understand it
 
 
-    public int boardScorer(Board board) {
+    public int boardScorer(Board board, char letter) {
         int score=0, finalScore=0;
         int lastScore=3;
         for (int z = 0; z < board.getBoard().length; z++) {
@@ -238,28 +238,42 @@ return bestMove-
     }
 
     //Very well. If you're making a scorer of your own, I will do the same. We can compare scorers to try to find new ideas.
-    public int otherScorer() {
-        int score = 0;
+    public int otherScorer(Board b) {
+        int score = 0, finalScore = 0, lastScore = 0;
         boolean[][][] checked = new boolean[8][7][8];
-        for(int z = 0; z < board.length; z++) {
-            for(int y = 0; y < board[0].length; y++) {
-                for(int x = 0; x < board.length; x++) {
+        for(int z = 0; z < b.getBoard().length; z++) {
+            for(int y = 0; y < b.getBoard()[0].length; y++) {
+                for(int x = 0; x < b.getBoard().length; x++) {
                     Location l = new Location(x, y, z);
-                    if(board[z][y][x] != EMPTY) {
-                        char c = board[z][y][x];
-                        score += (scorerHelper(l, 1, 0, 0, c)
-                         + scorerHelper(l, 0, 1, 0, c)
-                         + scorerHelper(l, 0, 0, 1, c)
-                         + scorerHelper(l, 1, 1, 0, c)
-                         + scorerHelper(l, -1, 1,0,  c)
-                         + scorerHelper(l, 1, 0, 1, c)
-                         + scorerHelper(l, 1, 0, -1, c)
-                         + scorerHelper(l, 0, 1, 1, c)
-                         + scorerHelper(l, 0, -1, 1, c)
-                         + scorerHelper(l, 1, 1, 1, c)
-                         + scorerHelper(l, 1, 1 ,-1, c)
-                         + scorerHelper(l, -1,1,1, c)
-                         + scorerHelper(l,-1,1,-1, c));
+                    score = checkXP(new Location(x, y, z), letter, 0, 0)
+                            + checkYP(new Location(x, y, z), letter, 0)
+                            + checkZP(new Location(x, y, z), letter, 0)
+                            + checkXM(new Location(x, y, z), letter, 0, 0)
+                            + checkYM(new Location(x, y, z), letter, 0)
+                            + checkZM(new Location(x, y, z), letter, 0)
+                            + checkYPZP(new Location(x, y, z), letter, 0)
+                            + checkYPZM(new Location(x, y, z), letter, 0)
+                            + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
+                            + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
+                            + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
+                    if(score>lastScore) {
+                        lastScore=score;
+                    }
+                    /*if(b.getBoard()[z][y][x] != EMPTY) {
+                        char c = b.getBoard()[z][y][x];
+                        score = (scorerHelper(l, 1, 0, 0, c, b)
+                         + scorerHelper(l, 0, 1, 0, c, b)
+                         + scorerHelper(l, 0, 0, 1, c, b)
+                         + scorerHelper(l, 1, 1, 0, c, b)
+                         + scorerHelper(l, -1, 1,0,  c, b)
+                         + scorerHelper(l, 1, 0, 1, c, b)
+                         + scorerHelper(l, 1, 0, -1, c, b)
+                         + scorerHelper(l, 0, 1, 1, c, b)
+                         + scorerHelper(l, 0, -1, 1, c, b)
+                         + scorerHelper(l, 1, 1, 1, c, b)
+                         + scorerHelper(l, 1, 1 ,-1, c, b)
+                         + scorerHelper(l, -1,1,1, c, b)
+                         + scorerHelper(l,-1,1,-1, c, b));
                         /*score = (scorerHelper(l, 1, 0, 0, c)
                          + scorerHelper(l, -1, 0, 0, c)
                          + scorerHelper(l, 0, 1, 0, c)
@@ -278,17 +292,20 @@ return bestMove-
                          + scorerHelper(l, 1, 0, -1, c)
                          + scorerHelper(l, -1, 0, 1, c)
                          + scorerHelper(l, -1, 0, -1, c)
-                         + scorerHelper())*/
-                    }
+                         + scorerHelper())
+                        if(score > lastScore)
+                            lastScore = score;
+                    }*/
                 }
             }
         }
-        return score;
+        finalScore = lastScore;
+        return finalScore;
     }
-    public int scorerHelper(Location l, int x, int y, int z, char c) {
-        if((l.z >= 0 && l.z < board.length) && (l.y >= 0 && l.y < board[0].length) && (l.x >= 0 && l.x < board.length)) {
-            if (board[l.z + z][l.y + y][l.x + x] == c) {
-                return 10 * scorerHelper(new Location(l.x + x, l.y + y, l.z + z), x, y, z, c);
+    public int scorerHelper(Location l, int x, int y, int z, char c, Board b) {
+        if((l.z + z >= 0 && l.z + z < b.getBoard().length) && (l.y + y >= 0 && l.y + y < b.getBoard()[0].length) && (l.x + x >= 0 && l.x + x < b.getBoard().length)) {
+            if (b.getBoard()[l.z + z][l.y + y][l.x + x] == c) {
+                return 10 * scorerHelper(new Location(l.x + x, l.y + y, l.z + z), x, y, z, c, b);
             }
         }
         return 1;

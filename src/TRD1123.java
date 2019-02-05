@@ -24,7 +24,7 @@ public class TRD1123 extends Player {
         this.board=board.getBoard();
         int lastScore=0;
         Location location=null;
-        bestMove=new Move((int)Math.random()*7,(int)Math.random()*7);
+        bestMove=new Move((int)(Math.random()*7),(int)(Math.random()*7));
         //Move lastMove = null;
         for(int z=0;z<board.getBoard().length;z++) {
             for (int x=0; x< board.getBoard()[0][0].length;x++) {
@@ -32,14 +32,16 @@ public class TRD1123 extends Player {
                     location=board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
                 BoardGrader boardGrader=new BoardGrader(board,location,letter,0,0);
-                System.out.println(x+", "+z+":"+boardGrader.boardScorer(board));
-                if(boardGrader.boardScorer(board)>lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
+                System.out.println(x+", "+z+":"+boardGrader.boardScorer(board, letter));
+                //System.out.println(x + ", " + z + ": " + boardGrader.otherScorer(board));
+                if(boardGrader.boardScorer(board, letter)>lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
                     //lastMove = new Move(x, z)
                     if (!board.isFull(new Move(x, z))) {
                         bestMove = new Move(location.x, location.z);
                     }
                 }
-                lastScore = boardGrader.boardScorer(board);
+                lastScore = boardGrader.boardScorer(board, letter);
+                //lastScore = boardGrader.otherScorer(board);
                 if(location!=null) {
                     board.setLocation(location, Board.EMPTY);
                 }
@@ -55,6 +57,8 @@ public class TRD1123 extends Player {
     //TODO: Craig scored a 95 on his test today, punish him for me
     //TODO: Why are our scores this low? All you need to do now is fix the boardScorer or otherScorer
     //Its getting better
+
+    //TODO: Code the thing to look into the future. I have no idea what you did to set all this up, so it's up to you.`
 
 
     public Player freshCopy() {
