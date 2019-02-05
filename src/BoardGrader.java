@@ -237,6 +237,8 @@ return bestMove-
 
     }
 
+
+
     //Very well. If you're making a scorer of your own, I will do the same. We can compare scorers to try to find new ideas.
     public int otherScorer(Board b) {
         int score = 0, finalScore = 0, lastScore = 0;
