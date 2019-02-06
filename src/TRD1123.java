@@ -99,6 +99,37 @@ ________________________█▒▒▒▒▒▒▒▒▒▒▒░░░█
 __________________________██▒▒▒▒▒▒░░░█▀
 _____________________________█░░░░░█▀
 _______________________________▀▀▀▀
+
+
+                                               :
+                                              ::
+                                             ::
+                                             ::
+                                            ::
+                                            ::
+                              __           ::
+   _..-'/-¯¯--/_          ,.--. ''.     |`\=,..
+-:--.---''-..  /_         |\\_\..  \    `-.=._/
+.-|¯         '.  \         \_ \-`/\ |    ::`
+  /  @  \      \  -_   _..--|-\¯¯``'--.-/_\
+  |   .-'|      \  \\-'\_/     ¯/-.|-.\_\_/
+  \_./` /        \_//-''/    .-'
+       |           '-/'@====/              _.--.
+   __.'             /¯¯'-. \-'.          _/   /¯'
+.''____|   /       |'--\__\/-._        .'    |
+ \ \_. \  |       _| -/        \-.__  /     /
+  \___\ '/   _.  ('-..| /       '_  ''   _.'
+        /  .'     ¯¯¯¯ /        | ``'--''
+       (  / ¯```¯¯¯¯¯|-|        |
+        \ \_.         \ \      /
+         \___\         '.'.   /
+                         /    |
+                        /   .'
+                       /  .' |
+                     .'  / \  \
+                    /___| /___'
+
+
 */
 
 //TODO: LOOK AT THE COMMENTS ABOVE!!!!!!!!!!!
@@ -118,9 +149,10 @@ public class TRD1123 extends Player {
     }
 
     public Move getMove(Board board) {
-        this.board = board.getBoard();
+        this.board = new Board(board).getBoard();
+        char[][][] baord = new char[8][7][8];
         int lastScore = 0;
-        char opponentLetter = ' ';
+        char opponentLetter = (letter == 'R') ? 'B' : 'R';
         Location location = null;
         bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
         Move lastMove = null;
@@ -130,26 +162,26 @@ public class TRD1123 extends Player {
                     location = board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
                 if (location!=null&&board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
-                    opponentLetter = board.getBoard()[location.z][location.y][location.x];
+                    //opponentLetter = board.getBoard()[location.z][location.y][location.x];
                 }
                 BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
                 //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
-                if (boardGrader.boardScorer(board, letter) > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
+                int myScore = boardGrader.boardScorer(board, letter);
+                int theirScore = boardGrader.boardScorer(board, opponentLetter);
+                if (myScore - theirScore > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
                     lastMove = new Move(x, z);
                     if (!board.isFull(new Move(x, z))) {
                         bestMove = new Move(location.x, location.z);
                     }
                 }
-                lastScore = boardGrader.boardScorer(board, letter);
+                lastScore = myScore - theirScore;
                 if (location != null) {
                     board.setLocation(location, Board.EMPTY);
                 }
             }
-
-            if (!board.isFull(bestMove)) {
-                return bestMove;//returns what boardGrader's best score is-VK
-            }
-
+        }
+        if (!board.isFull(bestMove)) {
+            return bestMove;//returns what boardGrader's best score is-VK
         }
         return null;
     }
@@ -170,9 +202,18 @@ public class TRD1123 extends Player {
             for (int y = 0; y < board.getBoard()[0].length; y++) {
                 for (int x = 0; x < board.getBoard()[0][0].length; x++) {
                     boardGrader =  new BoardGrader(board,new Location(x,y,z),opponentLetter,0,0);//TODO 2/6/19: USING BOARDGRADER METHODS, CHECK IF OPPONENT IS AT 5 IN ANY DIRECTION, THEN BLOCK HIM.
+                    //TODO: There has to be a shortcut somewhere here. We need to find it.
+
+                    if(board.getBoard()[z][y][x] == opponentLetter) {
+                    }
                     if(x+6<X_SIZE) {
                         if(boardGrader.checkXP(new Location(x,y,z),opponentLetter,0,0)==5&&board.getBoard()[z][y][x+6]!=letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
                             return new Move(x+6,z);
+                        }
+                    }
+                    if(y+6<Y_SIZE) {
+                        if(boardGrader.checkYP(new Location(x, y, z), opponentLetter,0) == 5 && board.getBoard()[z][y + 6][x] != letter) {
+                            return new Move(x, z);
                         }
                     }
                     if(x-6>0) {
@@ -180,11 +221,9 @@ public class TRD1123 extends Player {
                             return new Move(x-6,z);
                         }
                     }
-
-
                 }
             }
         }
-        return null;//TODO: If the blocker method returns a bull, we know that it is not necessary to block. If not, we take the move that blocker returns and use it to block the opposing AI's move
+        return null;//TODO: If the blocker method returns a null, we know that it is not necessary to block. If not, we take the move that blocker returns and use it to block the opposing AI's move
     }
 }
