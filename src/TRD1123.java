@@ -129,11 +129,11 @@ public class TRD1123 extends Player {
                 if (!(board.isFull(new Move(x, z)))) {
                     location = board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
                 }
-                if (board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
+                if (location!=null&&board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
                     opponentLetter = board.getBoard()[location.z][location.y][location.x];
                 }
                 BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
-                System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
+                //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
                 if (boardGrader.boardScorer(board, letter) > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
                     lastMove = new Move(x, z);
                     if (!board.isFull(new Move(x, z))) {
@@ -160,5 +160,31 @@ public class TRD1123 extends Player {
 
     public String getScore () {
         return score;
+    }
+
+    public Move blocker(Board board, char opponentLetter) {
+        BoardGrader boardGrader=null;
+        Move tempMove=null;
+        Location tempLocation=null;
+        for (int z = 0; z < board.getBoard().length; z++) {
+            for (int y = 0; y < board.getBoard()[0].length; y++) {
+                for (int x = 0; x < board.getBoard()[0][0].length; x++) {
+                    boardGrader =  new BoardGrader(board,new Location(x,y,z),opponentLetter,0,0);//TODO 2/6/19: USING BOARDGRADER METHODS, CHECK IF OPPONENT IS AT 5 IN ANY DIRECTION, THEN BLOCK HIM.
+                    if(x+6<X_SIZE) {
+                        if(boardGrader.checkXP(new Location(x,y,z),opponentLetter,0,0)==5&&board.getBoard()[z][y][x+6]!=letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                            return new Move(x+6,z);
+                        }
+                    }
+                    if(x-6>0) {
+                        if(boardGrader.checkXM(new Location(x,y,z),opponentLetter,0,0)==5&&board.getBoard()[z][y][x+6]!=letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                            return new Move(x-6,z);
+                        }
+                    }
+
+
+                }
+            }
+        }
+        return null;//TODO: If the blocker method returns a bull, we know that it is not necessary to block. If not, we take the move that blocker returns and use it to block the opposing AI's move
     }
 }

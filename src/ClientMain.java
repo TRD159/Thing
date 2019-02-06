@@ -8,9 +8,9 @@ public class ClientMain
 	public static final String ip = "T308030";
 	public static final int port = 8003;
 	
-	public static int moveSleepTime 		= 300;
-	public static int endSleepTime 			= 300;
-	public static int matchInfoSleepTime 	= 300;
+	public static int moveSleepTime 		= 0;
+	public static int endSleepTime 			= 0;
+	public static int matchInfoSleepTime 	= 0;
 	public static PlayerScores scores=null;
 	
 	
@@ -178,7 +178,7 @@ public class ClientMain
 							{
 								//System.out.println("*** calling move");
 								m = currentlyPlaying.getMove(new Board(board));
-								System.out.println("\t\t\t*** i want to move to " + m);
+								//System.out.println("\t\t\t*** i want to move to " + m);
 								os.reset();
 								os.writeObject(new Command_To_Server(Command_To_Server.MOVE,m));
 								os.reset();
