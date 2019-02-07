@@ -265,6 +265,8 @@ return bestMove-
     
     public boolean boardEmergencyDetector(Board board, char letter, int x, int y, int z, int score) {
 
+        boolean xplus=false,xminus=false,yplus=false,yminus=false,zplus=false,zminus=false;
+
         ArrayList<Method> methods=new ArrayList<Method>();
         for(int c=0;c<BoardGrader.class.getDeclaredMethods().length;c++) {
             if(BoardGrader.class.getDeclaredMethods()[c].getName().contains("check")){
@@ -277,6 +279,19 @@ return bestMove-
                 if(m.getGenericReturnType()==Integer.class) {
                     if ((Integer)m.invoke(board, letter, x, y, z, score)>= 3) {
                         //TODO: Return the String of the method, check to see if you have a P or M, then check where it is near to see what to do.
+                        for(int v=0;v<m.getName().length();v++) {
+                            if(m.getName().charAt(v)=='P') {
+                                if(m.getName().charAt(v--)=='X') {
+                                    xplus=true;
+                                }
+                                if(m.getName().charAt(v--)=='Y') {
+                                    yplus=true;
+                                }
+                                if(m.getName().charAt(v--)=='Z') {
+                                    zplus=true;
+                                }
+                            }
+                        }
                     }
                 }
             }catch(Exception e){
