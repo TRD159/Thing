@@ -149,6 +149,10 @@ public class TRD1123 extends Player {
         super("Craig", letter);
     }
 
+    public Move makeMove(Board board, Move m) {
+       return null;
+    }
+
     public Move getMove(Board board) {
         this.board = new Board(board).getBoard();
         char[][][] baord = new char[8][7][8];
@@ -169,6 +173,7 @@ public class TRD1123 extends Player {
                 //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
                 int myScore = boardGrader.boardScorer(board, letter);
                 int theirScore = boardGrader.boardScorer(board, opponentLetter);
+                System.out.println(x + ", " + z + ": " + (myScore - theirScore));
                 if (myScore - theirScore > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
                     lastMove = new Move(x, z);
                     if (!board.isFull(new Move(x, z))) {

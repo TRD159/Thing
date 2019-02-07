@@ -243,10 +243,24 @@ return bestMove-
     }
 
     public int boardScorerHelper(Board board, char letter, int x, int y, int z, int score) {
-        return checkXP(new Location(x, y, z), letter, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) + checkXM(new Location(x, y, z), letter, 0) + checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) + checkYPZP(new Location(x, y, z), letter, 0) +
-                checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
-                + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
-                + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
+        return checkXP(new Location(x, y, z), letter, 1)
+                + checkYP(new Location(x, y, z), letter, 1)
+                + checkZP(new Location(x, y, z), letter, 1)
+                + checkXM(new Location(x, y, z), letter, 1)
+                + checkYM(new Location(x, y, z), letter, 1)
+                + checkZM(new Location(x, y, z), letter, 1)
+                + checkYPZP(new Location(x, y, z), letter, 1)
+                + checkYPZM(new Location(x, y, z), letter, 1)
+                + checkZPXP(new Location(x, y, z), letter, 1)
+                + checkZPXM(new Location(x, y, z), letter, 1)
+                + checkYPXP(new Location(x, y, z), letter, 1)
+                + checkYMXP(new Location(x, y, z), letter, 1)
+                + checkYMZP(new Location(x, y, z), letter, 1)
+                + checkYMZM(new Location(x, y, z), letter, 1)
+                + checkYMZPXP(new Location(x, y, z), letter, 1)
+                + checkYPZMXP(new Location(x, y, z), letter, 1)
+                + checkYPZPXM(new Location(x, y, z), letter, 1)
+                + checkYPZPXP(new Location(x, y, z), letter, 1);
     }
     
     public boolean boardEmergencyDetector(Board board, char letter, int x, int y, int z, int score) {
@@ -285,77 +299,46 @@ return bestMove-
 
 
     //Very well. If you're making a scorer of your own, I will do the same. We can compare scorers to try to find new ideas.
-    public int otherScorer(Board b) {
+    public int otherScorer(Board b, char letter) {
         int score = 0, finalScore = 0, lastScore = 0;
         boolean[][][] checked = new boolean[8][7][8];
         for(int z = 0; z < b.getBoard().length; z++) {
             for(int y = 0; y < b.getBoard()[0].length; y++) {
                 for(int x = 0; x < b.getBoard().length; x++) {
                     Location l = new Location(x, y, z);
-                    score = checkXP(new Location(x, y, z), letter, 0)
-                            + checkYP(new Location(x, y, z), letter, 0)
-                            + checkZP(new Location(x, y, z), letter, 0)
-                            + checkXM(new Location(x, y, z), letter, 0)
-                            + checkYM(new Location(x, y, z), letter, 0)
-                            + checkZM(new Location(x, y, z), letter, 0)
-                            + checkYPZP(new Location(x, y, z), letter, 0)
-                            + checkYPZM(new Location(x, y, z), letter, 0)
-                            + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
-                            + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
-                            + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
-                    if(score>lastScore) {
-                        lastScore=score;
-                    }
-                    /*if(b.getBoard()[z][y][x] != EMPTY) {
-                        char c = b.getBoard()[z][y][x];
-                        score = (scorerHelper(l, 1, 0, 0, c, b)
-                         + scorerHelper(l, 0, 1, 0, c, b)
-                         + scorerHelper(l, 0, 0, 1, c, b)
-                         + scorerHelper(l, 1, 1, 0, c, b)
-                         + scorerHelper(l, -1, 1,0,  c, b)
-                         + scorerHelper(l, 1, 0, 1, c, b)
-                         + scorerHelper(l, 1, 0, -1, c, b)
-                         + scorerHelper(l, 0, 1, 1, c, b)
-                         + scorerHelper(l, 0, -1, 1, c, b)
-                         + scorerHelper(l, 1, 1, 1, c, b)
-                         + scorerHelper(l, 1, 1 ,-1, c, b)
-                         + scorerHelper(l, -1,1,1, c, b)
-                         + scorerHelper(l,-1,1,-1, c, b));
-                        /*score = (scorerHelper(l, 1, 0, 0, c)
-                         + scorerHelper(l, -1, 0, 0, c)
-                         + scorerHelper(l, 0, 1, 0, c)
-                         + scorerHelper(l, 0, -1, 0, c)
-                         + scorerHelper(l, 0, 0, 1, c)
-                         + scorerHelper(l, 0, 0, -1, c)
-                         + scorerHelper(l, 1, 1, 0, c)
-                         + scorerHelper(l, -1, 1, 0, c)
-                         + scorerHelper(l, 1, -1, 0, c)
-                         + scorerHelper(l, -1, -1, 0, c)
-                         + scorerHelper(l, 0, 1, 1, c)
-                         + scorerHelper(l, 0, 1, -1, c)
-                         + scorerHelper(l, 0, -1, 1, c)
-                         + scorerHelper(l, 0, -1, -1, c)
-                         + scorerHelper(l, 1, 0, 1, c)
-                         + scorerHelper(l, 1, 0, -1, c)
-                         + scorerHelper(l, -1, 0, 1, c)
-                         + scorerHelper(l, -1, 0, -1, c)
-                         + scorerHelper())
-                        if(score > lastScore)
-                            lastScore = score;
-                    }*/
+                    score = scorerHelper(l, 1, 0, 0, letter, 0, b)
+                            + scorerHelper(l, 0, 1, 0, letter, 0, b)
+                            + scorerHelper(l, 0, 0, 1, letter, 0, b)
+                            + scorerHelper(l, -1, 0, 0, letter, 0, b)
+                            + scorerHelper(l, 0, -1, 0, letter, 0, b)
+                            + scorerHelper(l, 0, 0, -1, letter, 0, b)
+                            + scorerHelper(l, 0, 1, 1, letter, 0, b)
+                            + scorerHelper(l, 0, 1, -1, letter, 0, b)
+                            + scorerHelper(l, 1, 0, 1, letter, 0, b)
+                            + scorerHelper(l, -1, 0, 1, letter, 0, b)
+                            + scorerHelper(l, 1, 1, 0, letter, 0, b)
+                            + scorerHelper(l, 1, -1, 0, letter, 0, b)
+                            + scorerHelper(l, 0, -1, 1, letter, 0, b)
+                            + scorerHelper(l, 0, -1, -1, letter, 0, b)
+                            + scorerHelper(l, 1, -1, 1, letter, 0, b)
+                            + scorerHelper(l, 1, 1, -1, letter, 0, b)
+                            + scorerHelper(l, -1, 1, 1, letter, 0, b)
+                            + scorerHelper(l, 1, 1, 1, letter, 0, b);
+                    if(score > lastScore)
+                        lastScore = score;
                 }
             }
         }
         finalScore = lastScore;
         return finalScore;
     }
-    public int scorerHelper(Location l, int x, int y, int z, char c, Board b) {
+    public int scorerHelper(Location l, int x, int y, int z, char c, int s, Board b) {
         if((l.z + z >= 0 && l.z + z < b.getBoard().length) && (l.y + y >= 0 && l.y + y < b.getBoard()[0].length) && (l.x + x >= 0 && l.x + x < b.getBoard().length)) {
             if (b.getBoard()[l.z + z][l.y + y][l.x + x] == c) {
-                return 10 * scorerHelper(new Location(l.x + x, l.y + y, l.z + z), x, y, z, c, b);
+                return scorerHelper(new Location(l.x + x, l.y + y, l.z + z), x, y, z, c, ++s, b);
             }
         }
-        return 1;
+        return s;
     }
     public int checkXP(Location l, char player, int x) { //x starts off being 0
         if(l.x==X_SIZE) {
@@ -363,7 +346,7 @@ return bestMove-
         }
         if(l.x < X_SIZE) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkXP(cL(l,1, 0, 0), player, ++x);
+                return 10 * checkXP(cL(l,1, 0, 0), player, x);
             }
         }
         return x;
@@ -375,7 +358,7 @@ return bestMove-
         }
         if(l.x >= 0) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkXM(cL(l,- 1, 0, 0), player, ++x);
+                return 10 *  checkXM(cL(l,- 1, 0, 0), player, x);
             }
         }
         return x;
@@ -386,7 +369,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYP(cL(l,0, 1, 0), player, ++y);
+                return 10 * checkYP(cL(l,0, 1, 0), player, y);
             }
         }
         return score;
@@ -398,7 +381,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE && l.z <Z_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZP(cL(l,0, 1, 1), player, ++y);
+                return 10 * checkYPZP(cL(l,0, 1, 1), player, y);
             }
         }
         return y;
@@ -409,7 +392,7 @@ return bestMove-
         }
         if (l.y > 0 && l.z <Z_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYMZP(cL(l,0, -1, 1), player, ++y);
+                return 10 * checkYMZP(cL(l,0, -1, 1), player, y);
             }
         }
         return y;
@@ -420,7 +403,7 @@ return bestMove-
         }
         if (l.y >=0 && l.z>=0&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYMZM(cL(l,0, -1, -1), player, ++y);
+                return 10 * checkYMZM(cL(l,0, -1, -1), player, y);
             }
         }
         return y;
@@ -432,7 +415,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE &&l.z>=0 &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZM(cL(l, 0, 1, -1), player, ++y);
+                return 10 * checkYPZM(cL(l, 0, 1, -1), player, y);
             }
         }
         return y;
@@ -443,7 +426,7 @@ return bestMove-
         }
         if (l.y >=0 &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYMZPXP(cL(l, 1, -1, 1), player, ++y);
+                return 10 * checkYMZPXP(cL(l, 1, -1, 1), player, y);
             }
         }
         return y;
@@ -454,7 +437,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE &&l.z>=0 &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZMXP(cL(l,1, 1, -1), player, ++y);
+                return 10 * checkYPZMXP(cL(l,1, 1, -1), player, y);
             }
         }
         return y;
@@ -465,7 +448,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x>=0&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZPXM(cL(l,-1, 1, 1), player, ++y);
+                return 10 * checkYPZPXM(cL(l,-1, 1, 1), player, y);
             }
         }
         return y;
@@ -476,7 +459,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPZPXP(cL(l,1, 1, 1), player, ++y);
+                return 10 * checkYPZPXP(cL(l,1, 1, 1), player, y);
             }
         }
         return y;
@@ -488,7 +471,7 @@ return bestMove-
         }
         if (l.z < Z_SIZE &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkZPXP(cL(l,1, 0, 1), player, ++y);
+                return 10 * checkZPXP(cL(l,1, 0, 1), player, y);
             }
         }
         return y;
@@ -499,7 +482,7 @@ return bestMove-
         }
         if (l.x >=0 &&l.z<Z_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkZPXM(cL(l,-1, 0, 1), player, ++y);
+                return 10 * checkZPXM(cL(l,-1, 0, 1), player, y);
             }
         }
         return y;
@@ -511,7 +494,7 @@ return bestMove-
         }
         if (l.y < Y_SIZE &&l.x<X_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYPXP(cL(l,1, 1, 0), player, ++y);
+                return 10 * checkYPXP(cL(l,1, 1, 0), player, y);
             }
         }
         return y;
@@ -524,7 +507,7 @@ return bestMove-
         }
         if (l.y >=0 &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkYMXP(cL(l,1, -1, 0), player, ++y);
+                return 10 * checkYMXP(cL(l,1, -1, 0), player,y);
             }
         }
         return y;
@@ -538,7 +521,7 @@ return bestMove-
         }
         if(l.y >= 0 && y < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkYM(cL(l,0,-1,0), player, ++y);
+                return 10 * checkYM(cL(l,0,-1,0), player, y);
             }
         }
 
@@ -550,7 +533,7 @@ return bestMove-
         }
         if(l.z < Z_SIZE && z < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkZP(cL(l,0,0,1), player, ++z);
+                return 10 * checkZP(cL(l,0,0,1), player, z);
             }
         }
         return z;
@@ -561,7 +544,7 @@ return bestMove-
         }
         if (l.z >= 0 && z < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return checkZM(cL(l, 0, 0, -1), player, ++z);
+                return 10 * checkZM(cL(l, 0, 0, -1), player, z);
             } 
         }
         return z;
