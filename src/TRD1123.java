@@ -1,3 +1,4 @@
+import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -203,23 +204,78 @@ public class TRD1123 extends Player {
                 for (int x = 0; x < board.getBoard()[0][0].length; x++) {
                     boardGrader =  new BoardGrader(board,new Location(x,y,z),opponentLetter,0,0);//TODO 2/6/19: USING BOARDGRADER METHODS, CHECK IF OPPONENT IS AT 5 IN ANY DIRECTION, THEN BLOCK HIM.
                     //TODO: There has to be a shortcut somewhere here. We need to find it.
+                    
+                    //TODO: I changed the requirements to trigger returning to >= 3, that way we wont be stuck and lose at 5 
+
+
+                    /*score = checkXP(new Location(x, y, z), letter, 0, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) +
+                    checkXM(new Location(x, y, z), letter, 0, 0) +  checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) +
+                     checkYPZP(new Location(x, y, z), letter, 0) +checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) +
+                    checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) +
+                    checkYMZM(new Location(x, y, z), letter, 0)+ checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
+                    + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);*/
+
 
                     if(board.getBoard()[z][y][x] == opponentLetter) {
-                    }
-                    if(x+6<X_SIZE) {
-                        if(boardGrader.checkXP(new Location(x,y,z),opponentLetter,0,0)==5&&board.getBoard()[z][y][x+6]!=letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
-                            return new Move(x+6,z);
+                        if (x + 6 < X_SIZE) {
+                            if (boardGrader.checkXP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y][x + 6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x + 6, z);
+                            }
                         }
-                    }
-                    if(y+6<Y_SIZE) {
-                        if(boardGrader.checkYP(new Location(x, y, z), opponentLetter,0) == 5 && board.getBoard()[z][y + 6][x] != letter) {
-                            return new Move(x, z);
+                        if (y + 6 < Y_SIZE) {
+                            if (boardGrader.checkYP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y + 6][x] != letter) {
+                                return new Move(x, z);
+                            }
                         }
-                    }
-                    if(x-6>0) {
-                        if(boardGrader.checkXM(new Location(x,y,z),opponentLetter,0,0)==5&&board.getBoard()[z][y][x+6]!=letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
-                            return new Move(x-6,z);
+                        if (z + 6 < Z_SIZE) {
+                            if (boardGrader.checkZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x, z+6);
+                            }
                         }
+                        if (x - 6 > 0) {
+                            if (boardGrader.checkXM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y][x - 6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x - 6, z);
+                            }
+                        }
+                        if (y - 6 > 0) {
+                            if (boardGrader.checkYM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y-6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x, z);
+                            }
+                        }
+
+                        if (z - 6 > 0) {
+                            if (boardGrader.checkZM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z-6][y][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x, z-6);
+                            }
+                        }
+
+                        if(y+6 < Y_SIZE&&z+6 < Z_SIZE) {
+                            if (boardGrader.checkYPZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y+6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x, z+6);
+                            }
+                        }
+
+                        if(y+6 < Y_SIZE&&z-6>0) {
+                            if (boardGrader.checkYPZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z-6][y+6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x, z-6);
+                            }
+                        }
+                        
+                        //ZPXP
+                        if(z+6 < Z_SIZE&&x+6<X_SIZE) {
+                            if (boardGrader.checkZPXP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x+6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x+6, z+6);
+                            }
+                        }
+
+
+                        if(z+6 < Z_SIZE&&x+6<X_SIZE) {
+                            if (boardGrader.checkZPXP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x+6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT*/) {
+                                return new Move(x+6, z+6);
+                            }
+                        }
+
+
                     }
                 }
             }

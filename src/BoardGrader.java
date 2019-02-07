@@ -1,3 +1,8 @@
+import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 public class BoardGrader {
     Location l=null;
     char letter=0;
@@ -238,10 +243,43 @@ return bestMove-
     }
 
     public int boardScorerHelper(Board board, char letter, int x, int y, int z, int score) {
-        return checkXP(new Location(x, y, z), letter, 0, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) + checkXM(new Location(x, y, z), letter, 0, 0) + checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) + checkYPZP(new Location(x, y, z), letter, 0) +
+        return checkXP(new Location(x, y, z), letter, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) + checkXM(new Location(x, y, z), letter, 0) + checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) + checkYPZP(new Location(x, y, z), letter, 0) +
                 checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) + checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) + checkYMZM(new Location(x, y, z), letter, 0)
                 + checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
                 + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
+    }
+    
+    public boolean boardEmergencyDetector(Board board, char letter, int x, int y, int z, int score) {
+
+        ArrayList<Method> methods=new ArrayList<Method>();
+        for(int c=0;c<BoardGrader.class.getDeclaredMethods().length;c++) {
+            if(BoardGrader.class.getDeclaredMethods()[c].getName().contains("check")){
+                methods.add(BoardGrader.class.getDeclaredMethods()[c]);
+            }
+        }
+
+        for(Method m:methods) {
+            try {
+                if(m.getGenericReturnType()==Integer.class) {
+                    if ((Integer)m.invoke(board, letter, x, y, z, score)>= 3) {
+                        //TODO: Return the String of the method, check to see if you have a P or M, then check where it is near to see what to do.
+                    }
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return true;//TODO: Actuallyreturn a move
+        /*if(checkXP(new Location(x, y, z), letter, 0) >= 3|| checkYP(new Location(x, y, z), letter, 0) >= 3|| checkZP(new Location(x, y, z), letter, 0) >= 3|| checkXM(new Location(x, y, z), letter, 0, 0) >= 3|| checkYM(new Location(x, y, z), letter, 0) >= 3|| checkZM(new Location(x, y, z), letter, 0) >= 3|| checkYPZP(new Location(x, y, z), letter, 0) >= 3||
+                checkYPZM(new Location(x, y, z), letter, 0) >= 3|| checkZPXP(new Location(x, y, z), letter, 0) >= 3|| checkZPXM(new Location(x, y, z), letter, 0) >= 3|| checkYPXP(new Location(x, y, z), letter, 0) >= 3|| checkYMXP(new Location(x, y, z), letter, 0) >= 3|| checkYMZP(new Location(x, y, z), letter, 0) >= 3|| checkYMZM(new Location(x, y, z), letter, 0)
+                >= 3|| checkYMZPXP(new Location(x, y, z), letter, 0) >= 3|| checkYPZMXP(new Location(x, y, z), letter, 0)
+                >= 3|| checkYPZPXM(new Location(x, y, z), letter, 0) >= 3|| checkYPZPXP(new Location(x, y, z), letter, 0)>=3) {
+
+            return true;
+        }
+
+        return false;*/
     }
 
 
@@ -254,10 +292,10 @@ return bestMove-
             for(int y = 0; y < b.getBoard()[0].length; y++) {
                 for(int x = 0; x < b.getBoard().length; x++) {
                     Location l = new Location(x, y, z);
-                    score = checkXP(new Location(x, y, z), letter, 0, 0)
+                    score = checkXP(new Location(x, y, z), letter, 0)
                             + checkYP(new Location(x, y, z), letter, 0)
                             + checkZP(new Location(x, y, z), letter, 0)
-                            + checkXM(new Location(x, y, z), letter, 0, 0)
+                            + checkXM(new Location(x, y, z), letter, 0)
                             + checkYM(new Location(x, y, z), letter, 0)
                             + checkZM(new Location(x, y, z), letter, 0)
                             + checkYPZP(new Location(x, y, z), letter, 0)
@@ -319,28 +357,28 @@ return bestMove-
         }
         return 1;
     }
-    public int checkXP(Location l, char player, int x, int score) { //x starts off being 0
+    public int checkXP(Location l, char player, int x) { //x starts off being 0
         if(l.x==X_SIZE) {
             return x;
         }
         if(l.x < X_SIZE) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkXP(cL(l,1, 0, 0), player, ++x, ++score);
+                return checkXP(cL(l,1, 0, 0), player, ++x);
             }
         }
-        return score;
+        return x;
     }
 
-    public int checkXM(Location l, char player, int x, int score) {
+    public int checkXM(Location l, char player, int x) {
         if(l.x==0) {
             return score;
         }
         if(l.x >= 0) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkXM(cL(l,- 1, 0, 0), player, ++x, ++score);
+                return checkXM(cL(l,- 1, 0, 0), player, ++x);
             }
         }
-        return score;
+        return x;
     }
     public int checkYP(Location l, char player, int y) {
         if (l.y == Y_SIZE) {
