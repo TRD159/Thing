@@ -263,43 +263,84 @@ return bestMove-
                 + checkYPZPXP(new Location(x, y, z), letter, 1);
     }
     
-    public boolean boardEmergencyDetector(Board board, char letter, int x, int y, int z, int score) {
+   /* public Move boardEmergencyDetector(Board board, char letter, int x, int y, int z) {
 
-        boolean xplus=false,xminus=false,yplus=false,yminus=false,zplus=false,zminus=false;
+        boolean xplus = false, xminus = false, yplus = false, yminus = false, zplus = false, zminus = false;
+        int xvalue = x, yvalue = y, zvalue = z;
+        Integer returnValue = 0;
 
-        ArrayList<Method> methods=new ArrayList<Method>();
-        for(int c=0;c<BoardGrader.class.getDeclaredMethods().length;c++) {
-            if(BoardGrader.class.getDeclaredMethods()[c].getName().contains("check")){
+        boolean xdonep = false, ydonep = false, zdonep = false, xdonem = false, ydonem = false, zdonem = false;
+
+        ArrayList<Method> methods = new ArrayList<Method>();
+        for (int c = 0; c < BoardGrader.class.getDeclaredMethods().length; c++) {
+            if (BoardGrader.class.getDeclaredMethods()[c].getName().contains("check")) {
                 methods.add(BoardGrader.class.getDeclaredMethods()[c]);
             }
         }
 
-        for(Method m:methods) {
+        for (Method m : methods) {
             try {
-                if(m.getGenericReturnType()==Integer.class) {
-                    if ((Integer)m.invoke(board, letter, x, y, z, score)>= 3) {
+                if (m.getGenericReturnType() == Integer.class) {
+                    if ((Integer) m.invoke(new Location(x, y, z), letter, 0) >= 4) {
+                        returnValue = (Integer) m.invoke(new Location(x, y, z), letter, 0);
                         //TODO: Return the String of the method, check to see if you have a P or M, then check where it is near to see what to do.
-                        for(int v=0;v<m.getName().length();v++) {
-                            if(m.getName().charAt(v)=='P') {
-                                if(m.getName().charAt(v--)=='X') {
-                                    xplus=true;
+                        for (int v = 0; v < m.getName().length(); v++) {
+                            if (m.getName().charAt(v) == 'P') {
+                                if (m.getName().charAt(v--) == 'X' && !xdonep) {
+                                    xplus = true;
+                                    xdonep = true;
                                 }
-                                if(m.getName().charAt(v--)=='Y') {
-                                    yplus=true;
+                                if (m.getName().charAt(v--) == 'Y' && !ydonep) {
+                                    yplus = true;
+                                    ydonep = true;
                                 }
-                                if(m.getName().charAt(v--)=='Z') {
-                                    zplus=true;
+                                if (m.getName().charAt(v--) == 'Z' && !zdonep) {
+                                    zplus = true;
+                                    zdonep = true;
+                                }
+                            }
+
+                            if (m.getName().charAt(v) == 'M') {
+                                if (m.getName().charAt(v--) == 'X' && !xdonem) {
+                                    xminus = true;
+                                    xdonem = true;
+                                }
+                                if (m.getName().charAt(v--) == 'Y' && !ydonem) {
+                                    yminus = true;
+                                    ydonem = true;
+                                }
+                                if (m.getName().charAt(v--) == 'Z' && !zdonem) {
+                                    zminus = true;
+                                    zdonem = true;
                                 }
                             }
                         }
                     }
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
 
-        return true;//TODO: Actuallyreturn a move
+        }
+        if (xplus) {
+            xvalue += (Integer) returnValue;
+        }
+        if (yplus) {
+            yvalue += (Integer) returnValue;
+        }
+        if (zplus) {
+            zvalue += (Integer) returnValue;
+        }
+        if (xminus) {
+            xvalue -= (Integer) returnValue;
+        }
+        if (yminus) {
+            yvalue -= (Integer) returnValue;
+        }
+        if (zminus) {
+            zvalue -= (Integer) returnValue;
+        }
+            return new Move(xvalue, zvalue);
         /*if(checkXP(new Location(x, y, z), letter, 0) >= 3|| checkYP(new Location(x, y, z), letter, 0) >= 3|| checkZP(new Location(x, y, z), letter, 0) >= 3|| checkXM(new Location(x, y, z), letter, 0, 0) >= 3|| checkYM(new Location(x, y, z), letter, 0) >= 3|| checkZM(new Location(x, y, z), letter, 0) >= 3|| checkYPZP(new Location(x, y, z), letter, 0) >= 3||
                 checkYPZM(new Location(x, y, z), letter, 0) >= 3|| checkZPXP(new Location(x, y, z), letter, 0) >= 3|| checkZPXM(new Location(x, y, z), letter, 0) >= 3|| checkYPXP(new Location(x, y, z), letter, 0) >= 3|| checkYMXP(new Location(x, y, z), letter, 0) >= 3|| checkYMZP(new Location(x, y, z), letter, 0) >= 3|| checkYMZM(new Location(x, y, z), letter, 0)
                 >= 3|| checkYMZPXP(new Location(x, y, z), letter, 0) >= 3|| checkYPZMXP(new Location(x, y, z), letter, 0)
@@ -308,8 +349,8 @@ return bestMove-
             return true;
         }
 
-        return false;*/
-    }
+        return false;
+    }*/
 
 
 
