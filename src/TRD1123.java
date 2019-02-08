@@ -1,4 +1,7 @@
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
 
@@ -200,103 +203,66 @@ public class TRD1123 extends Player {
         return score;
     }
 
-    /*public Move blocker(Board board, char opponentLetter) {
-        BoardGrader boardGrader=null;
-        Move tempMove=null;
-        Location tempLocation=null;
-        for (int z = 0; z < board.getBoard().length; z++) {
-            for (int y = 0; y < board.getBoard()[0].length; y++) {
-                for (int x = 0; x < board.getBoard()[0][0].length; x++) {
-                    boardGrader =  new BoardGrader(board,new Location(x,y,z),opponentLetter,0,0);//TODO 2/6/19: USING BOARDGRADER METHODS, CHECK IF OPPONENT IS AT 5 IN ANY DIRECTION, THEN BLOCK HIM.
-                    //TODO: There has to be a shortcut somewhere here. We need to find it.
-                    
-                    //TODO: I changed the requirements to trigger returning to >= 3, that way we wont be stuck and lose at 5 
 
-
-                    /*score = checkXP(new Location(x, y, z), letter, 0, 0) + checkYP(new Location(x, y, z), letter, 0) + checkZP(new Location(x, y, z), letter, 0) +
-                    checkXM(new Location(x, y, z), letter, 0, 0) +  checkYM(new Location(x, y, z), letter, 0) + checkZM(new Location(x, y, z), letter, 0) +
-                     checkYPZP(new Location(x, y, z), letter, 0) +checkYPZM(new Location(x, y, z), letter, 0) + checkZPXP(new Location(x, y, z), letter, 0) + checkZPXM(new Location(x, y, z), letter, 0) +
-                    checkYPXP(new Location(x, y, z), letter, 0) + checkYMXP(new Location(x, y, z), letter, 0) + checkYMZP(new Location(x, y, z), letter, 0) +
-                    checkYMZM(new Location(x, y, z), letter, 0)+ checkYMZPXP(new Location(x, y, z), letter, 0) + checkYPZMXP(new Location(x, y, z), letter, 0)
-                    + checkYPZPXM(new Location(x, y, z), letter, 0) + checkYPZPXP(new Location(x, y, z), letter, 0);
-
-
-                    if(board.getBoard()[z][y][x] == opponentLetter) {
-                        if (x + 6 < X_SIZE) {
-                            if (boardGrader.checkXP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y][x + 6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT) {
-                                return new Move(x + 6, z);
-                            }
-                        }
-                        if (y + 6 < Y_SIZE) {
-                            if (boardGrader.checkYP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y + 6][x] != letter) {
-                                return new Move(x, z);
-                            }
-                        }
-                        if (z + 6 < Z_SIZE) {
-                            if (boardGrader.checkZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x, z+6);
-                            }
-                        }
-                        if (x - 6 > 0) {
-                            if (boardGrader.checkXM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y][x - 6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x - 6, z);
-                            }
-                        }
-                        if (y - 6 > 0) {
-                            if (boardGrader.checkYM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z][y-6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x, z);
-                            }
-                        }
-
-                        if (z - 6 > 0) {
-                            if (boardGrader.checkZM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z-6][y][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x, z-6);
-                            }
-                        }
-
-                        if(y+6 < Y_SIZE&&z+6 < Z_SIZE) {
-                            if (boardGrader.checkYPZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y+6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x, z+6);
-                            }
-                        }
-
-                        if(y+6 < Y_SIZE&&z-6>=0) {
-                            if (boardGrader.checkYPZP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z-6][y+6][x] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x, z-6);
-                            }
-                        }
-                        
-                        //ZPXP
-                        if(z+6 < Z_SIZE&&x+6<X_SIZE) {
-                            if (boardGrader.checkZPXP(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x+6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x+6, z+6);
-                            }
-                        }
-
-                        //ZPXM
-                        if(z+6 < Z_SIZE&&x-6>=0) {
-                            if (boardGrader.checkZPXM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x+6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x-6, z+6);
-                            }
-                        }
-
-                        //YPXP
-                        if(y+6 < Z_SIZE&&x+6<X_SIZE) {
-                            if (boardGrader.checkZPXM(new Location(x, y, z), opponentLetter, 0) >= 3 && board.getBoard()[z+6][y][x+6] != letter/*TODO: THIS MAKES SURE THAT WE HAVEN'T ALREADY BLOCKED IT ) {
-                                return new Move(x+6, z);
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-        return null;//TODO: If the blocker method returns a null, we know that it is not necessary to block. If not, we take the move that blocker returns and use it to block the opposing AI's move
-    }*/
 
     public Move lookAhead() {
         //TODO: JUST DO THIS
+        List<scoredMove> bestMoves = new ArrayList<>();
+        int[] bestScores = new int[4];
+        return null;
+    }
 
+    /*This method gets the best four moves available to the player at the time.
+    In case you're worried about scoredMove, it's just move, except that it contains a score value and a copy of the move that was processed before it.
+    Basically, it's a binary search tree.
+    * */
+    public ArrayList<Move> makeMove(List<scoredMove> bestMoves, int[] bestScores, char c, scoredMove bestMove,Board board) {
+        this.board = new Board(board).getBoard();
+        int lastScore = 0;
+        char opponentLetter = (letter == 'R') ? 'B' : 'R';
+        Location location = null;
+        //bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
+        Move lastMove = null;
+        for (int z = 0; z < board.getBoard().length; z++) {
+            for (int x = 0; x < board.getBoard()[0][0].length; x++) {
+                if (!(board.isFull(new Move(x, z)))) {
+                    location = board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
+                }
+                if (location!=null&&board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
+                    //opponentLetter = board.getBoard()[location.z][location.y][location.x];
+                }
+                BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
+                //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
+                int myScore = boardGrader.boardScorer(board, letter);
+                int theirScore = boardGrader.boardScorer(board, opponentLetter);
+                //System.out.println(x + ", " + z + ": " + (myScore - theirScore));
+                if (myScore - theirScore > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
+                    lastMove = new Move(x, z);
+                    if (!board.isFull(new Move(x, z))) {
+                        bestMoves.add(new scoredMove(x, z, (myScore-theirScore), bestMove));
+                        while(bestMoves.size() > 4) {
+                            int a = 0;
+                            int worstScore = 2147483647; //The largest possible integer value there is
+                            int worstMove = 0;
+                            for(; a < bestMoves.size(); a++) {
+                                if(bestMoves.get(a).getScore() < worstScore) {
+                                    worstScore = bestMoves.get(a).getScore();
+                                    worstMove = a;
+                                }
+                            }
+                            bestMoves.remove(worstMove);
+                        }
+                    }
+                }
+                lastScore = myScore - theirScore;
+                if (location != null) {
+                    board.setLocation(location, Board.EMPTY);
+                }
+            }
+        }
+        if (!board.isFull(bestMove)) {
+            //return bestMove;//returns what boardGrader's best score is-VK
+        }
         return null;
     }
 }
