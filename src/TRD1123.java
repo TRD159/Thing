@@ -11,6 +11,7 @@ public class TRD1123 extends Player {
     public static final char EMPTY = '-', RED = 'R', BLUE = 'B', PLAYING = '-', TIE = 'T';
     public static final int X_SIZE = 8, Y_SIZE = 7, Z_SIZE = 8;
     char[][][] board;
+    Board boardy=null;
     String score = "";
 
 
@@ -23,8 +24,9 @@ public class TRD1123 extends Player {
     }
 
     public Move getMove(Board board) {
+        this.boardy=board;
         this.board = new Board(board).getBoard();
-        char[][][] baord = new char[8][7][8];
+        /*char[][][] baord = new char[8][7][8];
         int lastScore = 0;
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
         Location location = null;
@@ -57,8 +59,8 @@ public class TRD1123 extends Player {
         }
         if (!board.isFull(bestMove)) {
             return bestMove;//returns what boardGrader's best score is-VK
-        }
-        return null;
+        }*/
+        return lookAhead();
     }
 
     public Player freshCopy () {
@@ -72,22 +74,31 @@ public class TRD1123 extends Player {
 
 
     public Move lookAhead() {
+        Move bestMove=null;
         //TODO: JUST DO THIS
         List<scoredMove> bestMoves = new ArrayList<>();
         int[] bestScores = new int[4];
-        return null;
+        ArrayList<scoredMove> moves=makeMove(bestMoves,bestScores,' ',null,boardy);
+        System.out.println(moves.size());
+        int bestScore=0;
+        for(scoredMove m:moves) {
+            if(m.getScore()>bestScore) {
+                bestMove=m;
+            }
+        }
+        return (Move)bestMove;
     }
 
     /*This method gets the best four moves available to the player at the time.
     In case you're worried about scoredMove, it's just move, except that it contains a score value and a copy of the move that was processed before it.
     Basically, it's a binary search tree.
     * */
-    public ArrayList<Move> makeMove(List<scoredMove> bestMoves, int[] bestScores, char c, scoredMove bestMove,Board board) {
+    public ArrayList<scoredMove> makeMove(List<scoredMove> bestMoves, int[] bestScores, char c, scoredMove bestMove,Board board) {
         this.board = new Board(board).getBoard();
         int lastScore = 0;
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
         Location location = null;
-        //bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
+        //bestMove = (scoredMove)new scoredMove((int) Math.random() * 7, (int) Math.random() * 7);
         Move lastMove = null;
         for (int z = 0; z < board.getBoard().length; z++) {
             for (int x = 0; x < board.getBoard()[0][0].length; x++) {
