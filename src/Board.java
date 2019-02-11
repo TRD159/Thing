@@ -536,7 +536,6 @@ public class Board
     public boolean isFull(Move m)
     {
         return board[m.getZ()][0][m.getX()] != '-';
-
     }
 
     public String getWinType()

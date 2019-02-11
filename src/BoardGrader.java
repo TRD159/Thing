@@ -37,6 +37,14 @@ return bestMove-
 -VK
 */
 
+/*
+* New plan: Our current grader is getting us nowhere. We need a new one
+* 1. Create 11 Arraylists: 2 sets of five, one for each player, counting doubles, triples, quadruples, and quintuples, and one for useless garbage
+* 2. Implement a system to scan the board and categorize each and every piece into one of these Arraylists
+* 3. Score the contents of each Arraylist according to their priority, and make sure that Craig knows the difference between them.
+* -RK
+* */
+
 
 
     public int boardGrader(Board board) {
