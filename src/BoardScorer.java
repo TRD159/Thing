@@ -17,6 +17,7 @@ public class BoardScorer {
     char[][][] board=null;
     boolean opportunity=false;
     Method m= null;
+    Class<?>className;
 
     public boolean isOpportunity() {
         return opportunity;
@@ -25,38 +26,54 @@ public class BoardScorer {
     public Move score(Board board, char letter, int x, int y, int z) {
         this.board = board.getBoard();
         ArrayList<Method> methods = new ArrayList<Method>();
-        for (int c = 0; c < BoardGrader.class.getDeclaredMethods().length; c++) {
-            if (BoardGrader.class.getDeclaredMethods()[c].getName().contains("check")) {
-                methods.add(BoardGrader.class.getDeclaredMethods()[c]);
+        for (int c = 0; c < BoardScorer.class.getDeclaredMethods().length; c++) {
+            if (BoardScorer.class.getDeclaredMethods()[c].getName().contains("check")) {
+                methods.add(BoardScorer.class.getDeclaredMethods()[c]);
             }
+        }
+        for (Method m:
+             methods) {
+            //System.out.println(m.toString());
+
+        }
+        Object[]params={new Location(x, y, z), letter, 0};
+        try {
+            className=Class.forName("BoardScorer");
+            Object boardScore = className.newInstance();
+        }catch (Exception e) {
+            e.printStackTrace();
         }
 
         int tempx=0, tempz=0;
         for (int c = 0; c < methods.size(); c++) {
             try {
-                if ((Integer) (methods.get(c).invoke(new Location(x, y, z), letter, 0)) >= 1) {
-                    opportunity=true;
-                    m=methods.get(c);
-                    if(m.getName().contains("XP")) {
-                        x+=5;
-                    }
-                    if(m.getName().contains("YP")) {
-                        x+=5;
-                    }
-                    if(m.getName().contains("ZP")) {
-                        z+=5;
-                    }
-                    if(m.getName().contains("XM")) {
-                        x-=5;
-                    }
-                    if(m.getName().contains("YM")) {
-                        y-=5;
-                    }
-                    if(m.getName().contains("ZM")) {
-                        z-=5;
+                if((methods.get(c).getReturnType().getName().contains("int"))) {
+                    System.out.println("AYYO");
+                    if ((Integer) (methods.get(c).invoke(/*new Location(x, y, z), letter, 0)*/className,params)) >= 4) {
+                        System.out.println("HEY ");
+                        opportunity = true;
+                        m = methods.get(c);
+                        if (m.getName().contains("XP")) {
+                            x += 2;
+                        }
+                        if (m.getName().contains("YP")) {
+                            x += 2;
+                        }
+                        if (m.getName().contains("ZP")) {
+                            z += 2;
+                        }
+                        if (m.getName().contains("XM")) {
+                            x -= 2;
+                        }
+                        if (m.getName().contains("YM")) {
+                            y -= 2;
+                        }
+                        if (m.getName().contains("ZM")) {
+                            z -= 2;
+                        }
                     }
                 }
-            }catch(Exception e ){}
+            }catch(Exception e ){e.printStackTrace();}
         }
         if(x<X_SIZE&&z<Z_SIZE) {
             return new Move(x, z);
@@ -64,7 +81,7 @@ public class BoardScorer {
         return null;
     }
 
-    public int checkXP(Location l, char player, int x) { //x starts off being 0
+    public Integer checkXP(Location l, char player, int x) { //x starts off being 0
         if(l.x==X_SIZE) {
             return x;
         }
@@ -76,7 +93,7 @@ public class BoardScorer {
         return x;
     }
 
-    public int checkXM(Location l, char player, int x) {
+    public Integer checkXM(Location l, char player, int x) {
         if(l.x==0) {
             return x;
         }
@@ -87,7 +104,7 @@ public class BoardScorer {
         }
         return x;
     }
-    public int checkYP(Location l, char player, int y) {
+    public Integer checkYP(Location l, char player, int y) {
         if (l.y == Y_SIZE) {
             return y;
         }
@@ -99,7 +116,7 @@ public class BoardScorer {
         return y;
     }
 
-    public int checkYPZP(Location l, char player, int y) {
+    public Integer checkYPZP(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z==Z_SIZE) {
             return y;
         }
@@ -110,7 +127,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYMZP(Location l, char player, int y) {
+    public Integer checkYMZP(Location l, char player, int y) {
         if (l.y == 0||l.z==Z_SIZE) {
             return y;
         }
@@ -121,7 +138,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYMZM(Location l, char player, int y) {
+    public Integer checkYMZM(Location l, char player, int y) {
         if (l.y == 0||l.z==0) {
             return y;
         }
@@ -133,7 +150,7 @@ public class BoardScorer {
         return y;
     }
 
-    public int checkYPZM(Location l, char player, int y) {
+    public Integer checkYPZM(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == 0) {
             return y;
         }
@@ -144,7 +161,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYMZPXP(Location l, char player, int y) {
+    public Integer checkYMZPXP(Location l, char player, int y) {
         if (l.y == 0||l.z ==Z_SIZE||l.x==X_SIZE) {
             return y;
         }
@@ -155,7 +172,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYPZMXP(Location l, char player, int y) {
+    public Integer checkYPZMXP(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == 0||l.x==X_SIZE) {
             return y;
         }
@@ -166,7 +183,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYPZPXM(Location l, char player, int y) {
+    public Integer checkYPZPXM(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.z == Z_SIZE||l.x==0) {
             return y;
         }
@@ -177,7 +194,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkYPZPXP(Location l, char player, int y) {
+    public Integer checkYPZPXP(Location l, char player, int y) {
         if (l.y== Y_SIZE||l.z == Z_SIZE||l.x == X_SIZE) {
             return y;
         }
@@ -189,7 +206,7 @@ public class BoardScorer {
         return y;
     }
 
-    public int checkZPXP(Location l, char player, int y) {
+    public Integer checkZPXP(Location l, char player, int y) {
         if (l.z == Z_SIZE||l.x==X_SIZE) {
             return y;
         }
@@ -200,7 +217,7 @@ public class BoardScorer {
         }
         return y;
     }
-    public int checkZPXM(Location l, char player, int y) {
+    public Integer checkZPXM(Location l, char player, int y) {
         if (l.x ==0||l.z==Z_SIZE) {
             return y;
         }
@@ -212,7 +229,7 @@ public class BoardScorer {
         return y;
     }
 
-    public int checkYPXP(Location l, char player, int y) {
+    public Integer checkYPXP(Location l, char player, int y) {
         if (l.y == Y_SIZE||l.x==X_SIZE) {
             return y;
         }
@@ -225,7 +242,7 @@ public class BoardScorer {
     }
 
 
-    public int checkYMXP(Location l, char player, int y) {
+    public Integer checkYMXP(Location l, char player, int y) {
         if (l.y == 0||l.x==X_SIZE) {
             return y;
         }
@@ -239,7 +256,7 @@ public class BoardScorer {
 
 
 
-    public int checkYM(Location l, char player, int y) {
+    public Integer checkYM(Location l, char player, int y) {
         if(l.y==Y_SIZE) {
             return y;
         }
@@ -251,7 +268,7 @@ public class BoardScorer {
 
         return y;
     }
-    public int checkZP(Location l, char player, int z) {
+    public Integer checkZP(Location l, char player, int z) {
         if(l.z==Z_SIZE) {
             return z;
         }
@@ -262,7 +279,7 @@ public class BoardScorer {
         }
         return z;
     }
-    public int checkZM(Location l, char player, int z) {
+    public Integer checkZM(Location l, char player, int z) {
         if (l.z == 0) {
             return z;
         }

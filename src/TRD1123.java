@@ -80,32 +80,37 @@ public class TRD1123 extends Player {
                 for (int x = 0; x < board.getBoard()[0][0].length; x++) {
                     tempMove = b.score(board, letter, x, y, z);
                     if (b.isOpportunity()) {
-                        bestMove = tempMove;
+                        if (!board.isFull(tempMove)) {
+                            bestMove = tempMove;
+                        }
                     } else {
                         tempMove = b.score(board, opponentLetter, x, y, z);
                         if(b.isOpportunity()) {
-                            bestMove=tempMove;
+                            if (!board.isFull(tempMove)) {
+                                bestMove = tempMove;
+                            }
                         }
                     }
 
                     BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
 
-                    if(bestMove==null) {
-                        int myScore=0;
-                        lastScore=0;
-
-                        myScore = boardyGrader.boardScorer(board, letter);
-                        if(myScore>lastScore) {
-                            lastScore=myScore;
-                            bestMove=tempMove;
-                        }
-
-                    }
                 }
             }
 
         }
-        return bestMove;
+        if(bestMove!=null) {
+            return bestMove;
+        }
+        tempMove= new Move((int)Math.random()*7,(int)Math.random()*7);
+        do {
+            if (!board.isFull(tempMove)){
+                break;
+            }
+            else{
+                tempMove= new Move((int)Math.random()*7,(int)Math.random()*7);
+            }
+        }while (board.isFull(tempMove));
+        return tempMove;
     }
 
     public Player freshCopy () {
