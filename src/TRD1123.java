@@ -91,6 +91,14 @@ public class TRD1123 extends Player {
                     BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
 
                     if(bestMove==null) {
+                        int myScore=0;
+                        lastScore=0;
+
+                        myScore = boardyGrader.boardScorer(board, letter);
+                        if(myScore>lastScore) {
+                            lastScore=myScore;
+                            bestMove=tempMove;
+                        }
 
                     }
                 }

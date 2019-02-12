@@ -251,23 +251,23 @@ return bestMove-
 
     public int boardScorerHelper(Board board, char letter, int x, int y, int z, int score) {
         return checkXP(new Location(x, y, z), letter, 1)
-                + checkYP(new Location(x, y, z), letter, 1)
-                + checkZP(new Location(x, y, z), letter, 1)
-                + checkXM(new Location(x, y, z), letter, 1)
-                + checkYM(new Location(x, y, z), letter, 1)
-                + checkZM(new Location(x, y, z), letter, 1)
-                + checkYPZP(new Location(x, y, z), letter, 1)
-                + checkYPZM(new Location(x, y, z), letter, 1)
-                + checkZPXP(new Location(x, y, z), letter, 1)
-                + checkZPXM(new Location(x, y, z), letter, 1)
-                + checkYPXP(new Location(x, y, z), letter, 1)
-                + checkYMXP(new Location(x, y, z), letter, 1)
-                + checkYMZP(new Location(x, y, z), letter, 1)
-                + checkYMZM(new Location(x, y, z), letter, 1)
-                + checkYMZPXP(new Location(x, y, z), letter, 1)
-                + checkYPZMXP(new Location(x, y, z), letter, 1)
-                + checkYPZPXM(new Location(x, y, z), letter, 1)
-                + checkYPZPXP(new Location(x, y, z), letter, 1);
+                + checkYP(new Location(x, y, z), letter, 0)
+                + checkZP(new Location(x, y, z), letter, 0)
+                + checkXM(new Location(x, y, z), letter, 0)
+                + checkYM(new Location(x, y, z), letter, 0)
+                + checkZM(new Location(x, y, z), letter, 0)
+                + checkYPZP(new Location(x, y, z), letter, 0)
+                + checkYPZM(new Location(x, y, z), letter, 0)
+                + checkZPXP(new Location(x, y, z), letter, 0)
+                + checkZPXM(new Location(x, y, z), letter, 0)
+                + checkYPXP(new Location(x, y, z), letter, 0)
+                + checkYMXP(new Location(x, y, z), letter, 0)
+                + checkYMZP(new Location(x, y, z), letter, 0)
+                + checkYMZM(new Location(x, y, z), letter, 0)
+                + checkYMZPXP(new Location(x, y, z), letter, 0)
+                + checkYPZMXP(new Location(x, y, z), letter, 0)
+                + checkYPZPXM(new Location(x, y, z), letter, 0)
+                + checkYPZPXP(new Location(x, y, z), letter, 0);
     }
     
    /* public Move boardEmergencyDetector(Board board, char letter, int x, int y, int z) {
