@@ -13,6 +13,7 @@ public class TRD1123 extends Player {
     char[][][] board;
     Board boardy=null;
     String score = "";
+    BoardScorer b=new BoardScorer();
 
 
     public TRD1123(char letter) {
@@ -24,15 +25,16 @@ public class TRD1123 extends Player {
     }
 
     public Move getMove(Board board) {
-        this.boardy=new Board(board);
+        this.boardy = new Board(board);
         //this.board = new Board(board).getBoard();
         //char[][][] baord = new char[8][7][8];
         int lastScore = 0;
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
+
         Location location = null;
-        bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
+        //bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
         Move lastMove = null;
-        checkr: for (int z = 0; z < board.getBoard().length; z++) {
+        /*checkr: for (int z = 0; z < board.getBoard().length; z++) {
             for (int x = 0; x < board.getBoard()[0][0].length; x++) {
                 //I'm dying in here
 
@@ -40,7 +42,6 @@ public class TRD1123 extends Player {
                 if(!boardy.isFull(new Move(x, z)))
                     location = boardy.makeMove(new Move(x, z), opponentLetter);
 
-                BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
                 if(boardyGrader.boardScorer(boardy, opponentLetter) > 1000)
                     return new Move(location.x, location.z);
 
@@ -72,7 +73,31 @@ public class TRD1123 extends Player {
             return bestMove;//returns what boardGrader's best score is-VK
         }
         return null;
-        //return lookAhead();
+        //return lookAhead();*/
+        Move tempMove=null;
+        for (int z = 0; z < board.getBoard().length; z++) {
+            for (int y = 0; y < Y_SIZE; y++) {
+                for (int x = 0; x < board.getBoard()[0][0].length; x++) {
+                    tempMove = b.score(board, letter, x, y, z);
+                    if (b.isOpportunity()) {
+                        bestMove = tempMove;
+                    } else {
+                        tempMove = b.score(board, opponentLetter, x, y, z);
+                        if(b.isOpportunity()) {
+                            bestMove=tempMove;
+                        }
+                    }
+
+                    BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
+
+                    if(bestMove==null) {
+
+                    }
+                }
+            }
+
+        }
+        return bestMove;
     }
 
     public Player freshCopy () {
@@ -85,7 +110,7 @@ public class TRD1123 extends Player {
 
 
 
-    /*public Move lookAhead() {
+    public Move lookAhead() {
         Move bestMove=null;
         //TODO: JUST DO THIS
         List<scoredMove> bestMoves = new ArrayList<>();
@@ -101,9 +126,9 @@ public class TRD1123 extends Player {
         return (Move)bestMove;
     }
 
-    This method gets the best four moves available to the player at the time.
+    /*This method gets the best four moves available to the player at the time.
     In case you're worried about scoredMove, it's just move, except that it contains a score value and a copy of the move that was processed before it.
-    Basically, it's a binary search tree.
+    Basically, it's a binary search tree.*/
 
     public ArrayList<scoredMove> makeMove(List<scoredMove> bestMoves, int[] bestScores, char c, scoredMove bestMove,Board board) {
         //this.board = new Board(board).getBoard();
@@ -150,5 +175,5 @@ public class TRD1123 extends Player {
             }
         }
         return (ArrayList)bestMoves;
-    }*/
+    }
 }

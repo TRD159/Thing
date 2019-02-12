@@ -417,7 +417,7 @@ return bestMove-
 
     public int checkXM(Location l, char player, int x) {
         if(l.x==0) {
-            return score;
+            return x;
         }
         if(l.x >= 0) {
             if(board[l.z][l.y][l.x] == player) {
