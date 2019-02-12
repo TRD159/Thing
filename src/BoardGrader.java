@@ -45,8 +45,7 @@ return bestMove-
 * -RK
 * */
 
-
-
+//TODO: I HAVE CREATED A NEW CLASS FOR US TO USE. called BoardScorer
     public int boardGrader(Board board) {
         int score = 0;
         int count = 0;
