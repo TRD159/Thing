@@ -109,7 +109,7 @@ public class TRD1123 extends Player {
                     tempMove=b.score(boardy, opponentLetter, z,y,x);
                     if(tempMove!=null&&!board.isFull(tempMove)) {
                         bestMove=tempMove;
-                       // System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
+                        System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
                     }
 
                     if(bestMove==null) {
@@ -418,7 +418,7 @@ class BoardScorer {
         }
         if(l.x < X_SIZE) {
             if(board[l.z][l.y][l.x] == player) {
-                return checkXP(cL(l,1, 0, 0), player, ++x);
+                return checkXP(cL(l,1, 0, 0), player, 10 * x);
             }
         }
         return x;
@@ -430,7 +430,7 @@ class BoardScorer {
         }
         if(l.x >= 0) {
             if(board[l.z][l.y][l.x] == player) {
-                return    checkXM(cL(l,- 1, 0, 0), player, ++x);
+                return checkXM(cL(l,- 1, 0, 0), player, 10 * x);
             }
         }
         return x;
@@ -441,7 +441,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYP(cL(l,0, 1, 0), player, ++y);
+                return   checkYP(cL(l,0, 1, 0), player, 10 * y);
             }
         }
         return y;
@@ -453,7 +453,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE && l.z <Z_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZP(cL(l,0, 1, 1), player, ++y);
+                return   checkYPZP(cL(l,0, 1, 1), player, 10 * y);
             }
         }
         return y;
@@ -464,7 +464,7 @@ class BoardScorer {
         }
         if (l.y > 0 && l.z <Z_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZP(cL(l,0, -1, 1), player, ++y);
+                return   checkYMZP(cL(l,0, -1, 1), player, 10 * y);
             }
         }
         return y;
@@ -475,7 +475,7 @@ class BoardScorer {
         }
         if (l.y >=0 && l.z>=0&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZM(cL(l,0, -1, -1), player, ++y);
+                return   checkYMZM(cL(l,0, -1, -1), player, 10 * y);
             }
         }
         return y;
@@ -487,7 +487,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z>=0 &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZM(cL(l, 0, 1, -1), player, ++y);
+                return   checkYPZM(cL(l, 0, 1, -1), player, 10 * y);
             }
         }
         return y;
@@ -498,7 +498,7 @@ class BoardScorer {
         }
         if (l.y >=0 &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZPXP(cL(l, 1, -1, 1), player, ++y);
+                return   checkYMZPXP(cL(l, 1, -1, 1), player, 10 * y);
             }
         }
         return y;
@@ -509,7 +509,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z>=0 &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZMXP(cL(l,1, 1, -1), player, ++y);
+                return   checkYPZMXP(cL(l,1, 1, -1), player, 10 * y);
             }
         }
         return y;
@@ -520,7 +520,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x>=0&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZPXM(cL(l,-1, 1, 1), player, ++y);
+                return   checkYPZPXM(cL(l,-1, 1, 1), player, 10 * y);
             }
         }
         return y;
@@ -531,7 +531,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZPXP(cL(l,1, 1, 1), player, ++y);
+                return   checkYPZPXP(cL(l,1, 1, 1), player, 10 * y);
             }
         }
         return y;
@@ -543,7 +543,7 @@ class BoardScorer {
         }
         if (l.z < Z_SIZE &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZPXP(cL(l,1, 0, 1), player, ++y);
+                return   checkZPXP(cL(l,1, 0, 1), player, 10 * y);
             }
         }
         return y;
@@ -554,7 +554,7 @@ class BoardScorer {
         }
         if (l.x >=0 &&l.z<Z_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZPXM(cL(l,-1, 0, 1), player, ++y);
+                return   checkZPXM(cL(l,-1, 0, 1), player, 10 * y);
             }
         }
         return y;
@@ -566,7 +566,7 @@ class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.x<X_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPXP(cL(l,1, 1, 0), player, ++y);
+                return   checkYPXP(cL(l,1, 1, 0), player, 10 * y);
             }
         }
         return y;
@@ -579,7 +579,7 @@ class BoardScorer {
         }
         if (l.y >=0 &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMXP(cL(l,1, -1, 0), player,++y);
+                return   checkYMXP(cL(l,1, -1, 0), player,10 * y);
             }
         }
         return y;
@@ -593,7 +593,7 @@ class BoardScorer {
         }
         if(l.y >= 0 && y < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return   checkYM(cL(l,0,-1,0), player, ++y);
+                return   checkYM(cL(l,0,-1,0), player, 10 * y);
             }
         }
 
@@ -605,7 +605,7 @@ class BoardScorer {
         }
         if(l.z < Z_SIZE && z < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return   checkZP(cL(l,0,0,1), player, ++z);
+                return   checkZP(cL(l,0,0,1), player, 10 * z);
             }
         }
         return z;
@@ -616,7 +616,7 @@ class BoardScorer {
         }
         if (l.z >= 0 && z < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZM(cL(l, 0, 0, -1), player, ++z);
+                return   checkZM(cL(l, 0, 0, -1), player, 10 * z);
             }
         }
         return z;
