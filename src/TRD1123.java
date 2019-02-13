@@ -26,6 +26,7 @@ public class TRD1123 extends Player {
 
     public Move getMove(Board board) {
         this.boardy = new Board(board);
+        System.out.println("PLEASE");
         //this.board = new Board(board).getBoard();
         //char[][][] baord = new char[8][7][8];
         int lastScore = 0;
@@ -78,7 +79,7 @@ public class TRD1123 extends Player {
         for (int z = 0; z < board.getBoard().length; z++) {
             for (int y = 0; y < Y_SIZE; y++) {
                 for (int x = 0; x < board.getBoard()[0][0].length; x++) {
-                    tempMove = b.score(board, letter, x, y, z);
+                    /*tempMove = b.score(board, letter, x, y, z);
                     if (b.isOpportunity()) {
                         if (!board.isFull(tempMove)) {
                             bestMove = tempMove;
@@ -90,8 +91,17 @@ public class TRD1123 extends Player {
                                 bestMove = tempMove;
                             }
                         }
+                    }*/
+                    tempMove=b.score(board, letter, x,y,z);
+                    if(tempMove!=null&&!board.isFull(tempMove)) {
+                        tempMove=bestMove;
+                        System.out.println("WE JUST SCOORREED");
                     }
-
+                    tempMove=b.score(board, opponentLetter, x,y,z);
+                    if(tempMove!=null&&!board.isFull(tempMove)) {
+                        tempMove=bestMove;
+                        System.out.println("WE JUST SAAVVEED");
+                    }
                     BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
 
                 }
@@ -101,16 +111,17 @@ public class TRD1123 extends Player {
         if(bestMove!=null) {
             return bestMove;
         }
-        tempMove= new Move((int)Math.random()*7,(int)Math.random()*7);
-        do {
-            if (!board.isFull(tempMove)){
-                break;
+        else {
+            System.out.println("NOOOOO I'm NULLLLLL");
+        }
+        for(int x=0;x<X_SIZE;x++) {
+            for(int z=0;z<Z_SIZE;z++) {
+                if(!board.isFull(new Move(x,z))) {
+                    return new Move(x,z);
+                }
             }
-            else{
-                tempMove= new Move((int)Math.random()*7,(int)Math.random()*7);
-            }
-        }while (board.isFull(tempMove));
-        return tempMove;
+        }
+        return null;
     }
 
     public Player freshCopy () {
