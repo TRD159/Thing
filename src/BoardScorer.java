@@ -1,6 +1,6 @@
 /*TODO:
  * 1. Create 11 Arraylists: 2 sets of five, one for each player, counting doubles, triples, quadruples, and quintuples, and one for useless garbage
- * 2. Implement a system to scan the board and categorize each and every piece into one of these Arraylists
+ * 2. Implement a //System to scan the board and categorize each and every piece into one of these Arraylists
  * 3. Score the contents of each Arraylist according to their priority, and make sure that Craig knows the difference between them.
  * -RK
  * */
@@ -18,13 +18,14 @@ public class BoardScorer {
     boolean opportunity=false;
     Method m= null;
     Class<?>className;
+    int maxCount=1;
 
     public boolean isOpportunity() {
         return opportunity;
     }
 
     public Move score(Board board, char letter, int x, int y, int z) {
-        System.out.println("IM SCORING");
+        //System.out.println("IM SCORING");
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
         this.board = board.getBoard();
         /*ArrayList<Method> methods = new ArrayList<Method>();
@@ -35,10 +36,10 @@ public class BoardScorer {
         }
         for (Method m:
              methods) {
-            //System.out.println(m.toString());
+            ////System.out.println(m.toString());
 
         }
-        Object[]params={new Location(x, y, z), letter, 0};
+        Object[]params={new Location(x, y, z), letter, 1};
         try {
             className=Class.forName("BoardScorer");
             Object boardScore = className.newInstance();
@@ -50,9 +51,9 @@ public class BoardScorer {
         for (int c = 0; c < methods.size(); c++) {
             try {
                 if((methods.get(c).getReturnType().getName().contains("int"))) {
-                    System.out.println("AYYO");
-                    if ((Integer) (methods.get(c).invoke(/*new Location(x, y, z), letter, 0)className,params)) >= 0) {
-                        System.out.println("HEY ");
+                    //System.out.println("AYYO");
+                    if ((Integer) (methods.get(c).invoke(/*new Location(x, y, z), letter, 1)className,params)) >= 0) {
+                        //System.out.println("HEY ");
                         opportunity = true;
                         m = methods.get(c);
                         if (m.getName().contains("XP")) {
@@ -87,104 +88,105 @@ public class BoardScorer {
                                 ||checkYPZPXM(new Location(x,y,z),letter,0)||checkYPZPXP(new Location(x,y,z),letter,0)) {
                         */
 
-        int maxCount = 1;
-        System.out.println("\t\t\t\t\t"+checkXP(new Location(x, y, z), letter, 0));
-        if (checkXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (x < X_SIZE - (maxCount+1)) {
-                    System.out.println("\t\t\t\t\tEY I MAKE MOVE");
-                    if (board.getBoard()[z][y][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z);
+        maxCount = 0;
+        System.out.println("\t\t\t\t\t"+checkXP(new Location(x, y, z), letter, 1));
+        if (checkXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (x < X_SIZE - (checkXP(new Location(x, y, z), letter, 1))) {
+                    //System.out.println("\t\t\t\t\tEY I MAKE MOVE");
+                    if (board.getBoard()[z][y][x+(checkXP(new Location(x, y, z), letter, 1))] != opponentLetter)
+                        return new Move(x + (checkXP(new Location(x, y, z), letter, 1)), z);
             }
         }
-        if (checkYP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y < Y_SIZE - (maxCount+1)) {
-                System.out.println("\t\t\t\t\tEY I MAKE MOVE");
-                if (board.getBoard()[z][y+(maxCount+1)][x] != opponentLetter) return new Move(x, z);
+        if (checkYP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y < Y_SIZE - (checkYP(new Location(x, y, z), letter, 1))) {
+                //System.out.println("\t\t\t\t\tEY I MAKE MOVE");
+                if (board.getBoard()[z][y+(checkYP(new Location(x, y, z), letter, 1))][x] != opponentLetter) return new Move(x, z);
             }
         }
-        if (checkZP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1))
-                if (board.getBoard()[z+(maxCount+1)][y][x] != opponentLetter) return new Move(x, z + (maxCount+1));
+        if (checkZP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkZP(new Location(x, y, z), letter, 1)))
+                if (board.getBoard()[z+checkZP(new Location(x, y, z), letter, 1)][y][x] != opponentLetter) return new Move(x, z + (checkZP(new Location(x, y, z), letter, 1)));
         }
-        if (checkXM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (x - (maxCount+1) >= 0)
-                if (board.getBoard()[z][y][x-(maxCount+1)] != opponentLetter) return new Move(x - (maxCount+1), z);
+        if (checkXM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (x - (checkXM(new Location(x, y, z), letter, 1)) >= 0)
+                if (board.getBoard()[z][y][x-(checkXM(new Location(x, y, z), letter, 1))] != opponentLetter) return new Move(x - (checkXM(new Location(x, y, z), letter, 1)), z);
         }
-        if (checkYM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y - (maxCount+1) >= 0) {
-                if (board.getBoard()[z][y-(maxCount+1)][x] != opponentLetter) return new Move(x, z);
+        if (checkYM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y - (checkYM(new Location(x, y, z), letter, 1)) >= 0) {
+                if (board.getBoard()[z][y-(checkYM(new Location(x, y, z), letter, 1))][x] != opponentLetter) return new Move(x, z);
             }
         }
-        if (checkZM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z - (maxCount+1) >= 0) {
-                if (board.getBoard()[z-(maxCount+1)][y][x] != opponentLetter) return new Move(x, z - (maxCount+1));
+        if (checkZM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z - (checkZM(new Location(x, y, z), letter, 1)) >= 0) {
+                if (board.getBoard()[z-(checkZM(new Location(x, y, z), letter, 1))][y][x] != opponentLetter) return new Move(x, z - (checkZM(new Location(x, y, z), letter, 1)));
             }
         }
-        if (checkYPZP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y < Y_SIZE - (maxCount+1) && z < Z_SIZE - (maxCount+1)) {
-                if (board.getBoard()[z+(maxCount+1)][y+(maxCount+1)][x] != opponentLetter) return new Move(x, z + (maxCount+1));
+        if (checkYPZP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y < Y_SIZE - (checkYPZP(new Location(x, y, z), letter, 1)) && z < Z_SIZE - (checkYPZP(new Location(x, y, z), letter, 1))) {
+                if (board.getBoard()[z+(checkYPZP(new Location(x, y, z), letter, 1))][y+(checkYPZP(new Location(x, y, z), letter, 1))][x] != opponentLetter) return new Move(x, z + (checkYPZP(new Location(x, y, z), letter, 1)));
             }
         }
-        if (checkYPZM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y < Y_SIZE - (maxCount+1) && z - (maxCount+1) >= 0)
-                if (board.getBoard()[z-(maxCount+1)][y+(maxCount+1)][x] != opponentLetter) return new Move(x, z - (maxCount+1));
+        if (checkYPZM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y < Y_SIZE - (checkYPZM(new Location(x, y, z), letter, 1)) && z - (checkYPZM(new Location(x, y, z), letter, 1)) >= 0)
+                if (board.getBoard()[z-(checkYPZM(new Location(x, y, z), letter, 1))][y+checkYPZM(new Location(x, y, z), letter, 1)][x] != opponentLetter) return new Move(x, z - (checkYPZM(new Location(x, y, z), letter, 1)));
         }
-        if (checkZPXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1) && x < X_SIZE)
-                if (board.getBoard()[z+(maxCount+1)][y][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z + (maxCount+1));
+        if (checkZPXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkZPXP(new Location(x, y, z), letter, 1) ) && x < X_SIZE-(checkZPXP(new Location(x, y, z), letter, 1) ))
+                if (board.getBoard()[z+(checkZPXP(new Location(x, y, z), letter, 1) )][y][x+(checkZPXP(new Location(x, y, z), letter, 1) )] != opponentLetter) return new Move(x + (checkZPXP(new Location(x, y, z), letter, 1) ), z + (checkZPXP(new Location(x, y, z), letter, 1) ));
         }
-        if (checkZPXM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1) && x >= (maxCount+1))
-                if (board.getBoard()[z+(maxCount+1)][y][x-(maxCount+1)] != opponentLetter) return new Move(x - (maxCount+1), z + (maxCount+1));
+        if (checkZPXM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkZPXM(new Location(x, y, z), letter, 1)) && x - (checkZPXM(new Location(x, y, z), letter, 1))>= 0)
+                if (board.getBoard()[z+(checkZPXM(new Location(x, y, z), letter, 1))][y][x-(checkZPXM(new Location(x, y, z), letter, 1))] != opponentLetter) return new Move(x - (checkZPXM(new Location(x, y, z), letter, 1)), z + (checkZPXM(new Location(x, y, z), letter, 1)));
         }
-        if (checkYPXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y + (maxCount+1) < Y_SIZE && x + (maxCount+1) < X_SIZE)
-                if (board.getBoard()[z][y+(maxCount+1)][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z);
+        if (checkYPXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y + (checkYPXP(new Location(x, y, z), letter, 1) ) < Y_SIZE && x + (checkYPXP(new Location(x, y, z), letter, 1) ) < X_SIZE)
+                if (board.getBoard()[z][y+(checkYPXP(new Location(x, y, z), letter, 1) )][x+(checkYPXP(new Location(x, y, z), letter, 1) )] != opponentLetter) return new Move(x + (checkYPXP(new Location(x, y, z), letter, 1) ), z);
         }
-        if (checkYMXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y - (maxCount+1) >= 0 && x + (maxCount+1) < X_SIZE)
-                if (board.getBoard()[z][y-(maxCount+1)][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z);
+        if (checkYMXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y - (checkYMXP(new Location(x, y, z), letter, 1)) >= 0 && x + (checkYMXP(new Location(x, y, z), letter, 1)) < X_SIZE)
+                if (board.getBoard()[z][y-(checkYMXP(new Location(x, y, z), letter, 1))][x+(checkYMXP(new Location(x, y, z), letter, 1))] != opponentLetter) return new Move(x + (checkYMXP(new Location(x, y, z), letter, 1)), z);
         }
-        if (checkYMZP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y - (maxCount+1) >= 0 && z + (maxCount+1) < Z_SIZE)
-                if (board.getBoard()[z+(maxCount+1)][y-(maxCount+1)][x] != opponentLetter) return new Move(x, z + (maxCount+1));
+        if (checkYMZP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y - (checkYMZP(new Location(x, y, z), letter, 1)) >= 0 && z + (checkYMZP(new Location(x, y, z), letter, 1)) < Z_SIZE)
+                if (board.getBoard()[z+(checkYMZP(new Location(x, y, z), letter, 1))][y-(checkYMZP(new Location(x, y, z), letter, 1))][x] != opponentLetter) return new Move(x, z + (checkYMZP(new Location(x, y, z), letter, 1)));
         }
-        if (checkYMZM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y - (maxCount+1) >= 0 && z - (maxCount+1) >= 0)
-                if (board.getBoard()[z-(maxCount+1)][y-(maxCount+1)][x] != opponentLetter) return new Move(x, z - (maxCount+1));
+        if (checkYMZM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y - (checkYMZM(new Location(x, y, z), letter, 1)) >= 0 && z - (checkYMZM(new Location(x, y, z), letter, 1)) >= 0)
+                if (board.getBoard()[z-(checkYMZM(new Location(x, y, z), letter, 1))][y-(checkYMZM(new Location(x, y, z), letter, 1))][x] != opponentLetter) return new Move(x, z - (checkYMZM(new Location(x, y, z), letter, 1)));
         }
-        if (checkYMZPXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (y - (maxCount+1) >= 0 && z + (maxCount+1) < Z_SIZE && x + (maxCount+1) < X_SIZE)
-                if (board.getBoard()[z+(maxCount+1)][y-(maxCount+1)][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z + (maxCount+1));
+        if (checkYMZPXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (y - (checkYMZPXP(new Location(x, y, z), letter, 1)) >= 0 && z + (checkYMZPXP(new Location(x, y, z), letter, 1)) < Z_SIZE && x + (checkYMZPXP(new Location(x, y, z), letter, 1)) < X_SIZE)
+                if (board.getBoard()[z+(checkYMZPXP(new Location(x, y, z), letter, 1))][y-(checkYMZPXP(new Location(x, y, z), letter, 1))][x+(checkYMZPXP(new Location(x, y, z), letter, 1))] != opponentLetter) return new Move(x + (checkYMZPXP(new Location(x, y, z), letter, 1)), z + (checkYMZPXP(new Location(x, y, z), letter, 1)));
         }
-        if (checkYPZMXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1) && x < X_SIZE)
-                if (board.getBoard()[z-(maxCount+1)][y+(maxCount+1)][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z + (maxCount+1));
+        if (checkYPZMXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkYPZMXP(new Location(x, y, z), letter, 1)) && x +(checkYPZMXP(new Location(x, y, z), letter, 1) )< X_SIZE)
+                if (board.getBoard()[z-(checkYPZMXP(new Location(x, y, z), letter, 1) )][y+(checkYPZMXP(new Location(x, y, z), letter, 1) )][x+(checkYPZMXP(new Location(x, y, z), letter, 1) )] != opponentLetter) return new Move(x + (checkYPZMXP(new Location(x, y, z), letter, 1) ), z - (checkYPZMXP(new Location(x, y, z), letter, 1) ));
         }
-        if (checkYPZPXM(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1) && x >= (maxCount+1))
-                if (board.getBoard()[z+(maxCount+1)][y+(maxCount+1)][x-(maxCount+1)] != opponentLetter) return new Move(x - (maxCount+1), z + (maxCount+1));
+        if (checkYPZPXM(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkYPZPXM(new Location(x, y, z), letter, 1)) && x -(checkYPZPXM(new Location(x, y, z), letter, 1))>=0)
+                if (board.getBoard()[z+(checkYPZPXM(new Location(x, y, z), letter, 1))][y+(checkYPZPXM(new Location(x, y, z), letter, 1))][x-(checkYPZPXM(new Location(x, y, z), letter, 1))] != opponentLetter) return new Move(x - (checkYPZPXM(new Location(x, y, z), letter, 1)), z + (checkYPZPXM(new Location(x, y, z), letter, 1)));
         }
-        if (checkYPZPXP(new Location(x, y, z), letter, 0) >= maxCount) {
-            System.out.println("\t\t\t PLEASE SEE MNEEEE");
-            if (z < Z_SIZE - (maxCount+1) && x < X_SIZE)
-                if (board.getBoard()[z+(maxCount+1)][y+(maxCount+1)][x+(maxCount+1)] != opponentLetter) return new Move(x + (maxCount+1), z + (maxCount+1));
+        if (checkYPZPXP(new Location(x, y, z), letter, 1) >= maxCount) {
+            //System.out.println("\t\t\t PLEASE SEE MNEEEE");
+            if (z < Z_SIZE - (checkYPZPXP(new Location(x, y, z), letter, 1) ) && x +(checkYPZPXP(new Location(x, y, z), letter, 1) )< X_SIZE)
+                if (board.getBoard()[z+(checkYPZPXP(new Location(x, y, z), letter, 1) )][y+(checkYPZPXP(new Location(x, y, z), letter, 1) )][x+(checkYPZPXP(new Location(x, y, z), letter, 1) )] != opponentLetter) return new Move(x + (checkYPZPXP(new Location(x, y, z), letter, 1) ), z + (checkYPZPXP(new Location(x, y, z), letter, 1) ));
         }
         return null;
 
@@ -196,7 +198,7 @@ public class BoardScorer {
         }
         if(l.x < X_SIZE) {
             if(board[l.z][l.y][l.x] == player) {
-                return   checkXP(cL(l,1, 0, 0), player, x);
+                return checkXP(cL(l,1, 0, 0), player, ++x);
             }
         }
         return x;
@@ -208,7 +210,7 @@ public class BoardScorer {
         }
         if(l.x >= 0) {
             if(board[l.z][l.y][l.x] == player) {
-                return    checkXM(cL(l,- 1, 0, 0), player, x);
+                return    checkXM(cL(l,- 1, 0, 0), player, ++x);
             }
         }
         return x;
@@ -219,7 +221,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYP(cL(l,0, 1, 0), player, y);
+                return   checkYP(cL(l,0, 1, 0), player, ++y);
             }
         }
         return y;
@@ -231,7 +233,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE && l.z <Z_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZP(cL(l,0, 1, 1), player, y);
+                return   checkYPZP(cL(l,0, 1, 1), player, ++y);
             }
         }
         return y;
@@ -242,7 +244,7 @@ public class BoardScorer {
         }
         if (l.y > 0 && l.z <Z_SIZE) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZP(cL(l,0, -1, 1), player, y);
+                return   checkYMZP(cL(l,0, -1, 1), player, ++y);
             }
         }
         return y;
@@ -253,7 +255,7 @@ public class BoardScorer {
         }
         if (l.y >=0 && l.z>=0&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZM(cL(l,0, -1, -1), player, y);
+                return   checkYMZM(cL(l,0, -1, -1), player, ++y);
             }
         }
         return y;
@@ -265,7 +267,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z>=0 &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZM(cL(l, 0, 1, -1), player, y);
+                return   checkYPZM(cL(l, 0, 1, -1), player, ++y);
             }
         }
         return y;
@@ -276,7 +278,7 @@ public class BoardScorer {
         }
         if (l.y >=0 &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMZPXP(cL(l, 1, -1, 1), player, y);
+                return   checkYMZPXP(cL(l, 1, -1, 1), player, ++y);
             }
         }
         return y;
@@ -287,7 +289,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z>=0 &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZMXP(cL(l,1, 1, -1), player, y);
+                return   checkYPZMXP(cL(l,1, 1, -1), player, ++y);
             }
         }
         return y;
@@ -298,7 +300,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x>=0&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZPXM(cL(l,-1, 1, 1), player, y);
+                return   checkYPZPXM(cL(l,-1, 1, 1), player, ++y);
             }
         }
         return y;
@@ -309,7 +311,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPZPXP(cL(l,1, 1, 1), player, y);
+                return   checkYPZPXP(cL(l,1, 1, 1), player, ++y);
             }
         }
         return y;
@@ -321,7 +323,7 @@ public class BoardScorer {
         }
         if (l.z < Z_SIZE &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZPXP(cL(l,1, 0, 1), player, y);
+                return   checkZPXP(cL(l,1, 0, 1), player, ++y);
             }
         }
         return y;
@@ -332,7 +334,7 @@ public class BoardScorer {
         }
         if (l.x >=0 &&l.z<Z_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZPXM(cL(l,-1, 0, 1), player, y);
+                return   checkZPXM(cL(l,-1, 0, 1), player, ++y);
             }
         }
         return y;
@@ -344,7 +346,7 @@ public class BoardScorer {
         }
         if (l.y < Y_SIZE &&l.x<X_SIZE &&y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYPXP(cL(l,1, 1, 0), player, y);
+                return   checkYPXP(cL(l,1, 1, 0), player, ++y);
             }
         }
         return y;
@@ -357,7 +359,7 @@ public class BoardScorer {
         }
         if (l.y >=0 &&l.x<X_SIZE&& y < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkYMXP(cL(l,1, -1, 0), player,y);
+                return   checkYMXP(cL(l,1, -1, 0), player,++y);
             }
         }
         return y;
@@ -371,7 +373,7 @@ public class BoardScorer {
         }
         if(l.y >= 0 && y < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return   checkYM(cL(l,0,-1,0), player, y);
+                return   checkYM(cL(l,0,-1,0), player, ++y);
             }
         }
 
@@ -383,7 +385,7 @@ public class BoardScorer {
         }
         if(l.z < Z_SIZE && z < 5) {
             if(board[l.z][l.y][l.x] == player) {
-                return   checkZP(cL(l,0,0,1), player, z);
+                return   checkZP(cL(l,0,0,1), player, ++z);
             }
         }
         return z;
@@ -394,7 +396,7 @@ public class BoardScorer {
         }
         if (l.z >= 0 && z < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZM(cL(l, 0, 0, -1), player, z);
+                return   checkZM(cL(l, 0, 0, -1), player, ++z);
             }
         }
         return z;

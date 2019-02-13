@@ -18,6 +18,7 @@ public class TRD1123 extends Player {
 
     public TRD1123(char letter) {
         super("Craig", letter);
+        this.letter=letter;
     }
 
     public Move makeMove(Board board, Move m) {
@@ -26,11 +27,16 @@ public class TRD1123 extends Player {
 
     public Move getMove(Board board) {
         this.boardy = new Board(board);
-        System.out.println("PLEASE");
         //this.board = new Board(board).getBoard();
         //char[][][] baord = new char[8][7][8];
         int lastScore = 0;
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
+        if(letter=='R') {
+            opponentLetter='B';
+        }
+        else{
+            opponentLetter='R';
+        }
 
         Location location = null;
         //bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
@@ -76,9 +82,9 @@ public class TRD1123 extends Player {
         return null;
         //return lookAhead();*/
         Move tempMove=null;
-        for (int z = 0; z < board.getBoard().length; z++) {
+        for (int x = 0; x < X_SIZE; x++) {
             for (int y = 0; y < Y_SIZE; y++) {
-                for (int x = 0; x < board.getBoard()[0][0].length; x++) {
+                for (int z = 0; z<Z_SIZE; z++) {
                     /*tempMove = b.score(board, letter, x, y, z);
                     if (b.isOpportunity()) {
                         if (!board.isFull(tempMove)) {
@@ -92,17 +98,29 @@ public class TRD1123 extends Player {
                             }
                         }
                     }*/
-                    tempMove=b.score(board, letter, x,y,z);
-                    if(tempMove!=null&&!board.isFull(tempMove)) {
-                        tempMove=bestMove;
+
+                    //tempMove=b.score(boardy, letter, x,y,z);
+                    /*if(tempMove!=null&&!board.isFull(tempMove)) {
+                        bestMove=tempMove;
                         System.out.println("WE JUST SCOORREED");
-                    }
-                    tempMove=b.score(board, opponentLetter, x,y,z);
+                    }*/
+                    tempMove=b.score(boardy, opponentLetter, x,y,z);
                     if(tempMove!=null&&!board.isFull(tempMove)) {
-                        tempMove=bestMove;
-                        System.out.println("WE JUST SAAVVEED");
+                        bestMove=tempMove;
+                        System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
                     }
-                    BoardGrader boardyGrader = new BoardGrader(boardy, location, opponentLetter, 0, 0);
+
+                    /*if(bestMove==null) {
+                        tempMove=new Move(x,z);
+                        if(!board.isFull(tempMove)) {
+                            location = boardy.makeMove(tempMove, letter);
+                        }
+                        BoardGrader boardyGrader = new BoardGrader(boardy, location, letter, 0, 0);
+                        if(boardyGrader.boardScorer(boardy,letter)>lastScore) {
+                            lastScore=boardyGrader.boardScorer(boardy,letter);
+                            bestMove=tempMove;
+                        }
+                    }*/
 
                 }
             }
@@ -113,13 +131,6 @@ public class TRD1123 extends Player {
         }
         else {
             System.out.println("NOOOOO I'm NULLLLLL");
-        }
-        for(int x=0;x<X_SIZE;x++) {
-            for(int z=0;z<Z_SIZE;z++) {
-                if(!board.isFull(new Move(x,z))) {
-                    return new Move(x,z);
-                }
-            }
         }
         return null;
     }
