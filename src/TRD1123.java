@@ -31,7 +31,16 @@ public class TRD1123 extends Player {
         this.boardy = new Board(board);
         //this.board = new Board(board).getBoard();
         //char[][][] baord = new char[8][7][8];
+        boolean first = true;
         int lastScore = 0;
+        for(int x = 0; x < X_SIZE; x++) {
+            for(int z = 0; z < Z_SIZE; z++) {
+                if(board.getBoard()[z][0][x] == getLetter())
+                    first = false;
+            }
+        }
+        if(first)
+            return new Move((int)(Math.random() * 8), (int)(Math.random() * 8));
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
         if(letter=='R') {
             opponentLetter='B';
