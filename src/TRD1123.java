@@ -626,4 +626,349 @@ class BoardScorer {
     Location cL(Location l, int x, int y, int z) {
         return new Location(l.x + x, l.y + y, l.z + z);
     }
+    
+    public Move potentialTaker(Board board, Move move, char c) {// THIS IS JUST TULLY'S BOARDSCORE METHOD REWRITTEN TO FIT OUR MOVE
+        //TODO 2/13/19
+
+        int z=move.getZ();
+        int x=move.getX();
+        char[][][]boardy=board.getBoard();
+        int needed=4;
+        String winType="";
+        char winner=' ';
+        int y=0;
+        
+        int hCount=1;
+
+        for(int xx=x+1; xx<X_SIZE;xx++)
+            if(boardy[z][y][xx]==c)
+                hCount++;
+            else
+                break;
+        for(int xx=x-1; xx>=0;xx--)
+            if(boardy[z][y][xx]==c)
+                hCount++;
+            else
+                break;
+
+        if(hCount>=needed){
+            winType="Horizontal";
+            winner=c;
+
+            return new Move(x+hCount,z);
+
+        }
+
+        // back
+        int bCount=1;
+        for(int zz=z+1; zz<Z_SIZE;zz++)
+            if(boardy[zz][y][x]==c)
+                bCount++;
+            else
+                break;
+        for(int zz=z-1; zz>=0;zz--)
+            if(boardy[zz][y][x]==c)
+                bCount++;
+            else
+                break;
+        if(bCount>=needed){
+            winType="depth";
+            winner=c;
+
+
+            return new Move(x,z+bCount);
+        }
+
+        // up
+        int uCount=1;
+        for(int yy=y+1; yy<Y_SIZE;yy++)
+            if(boardy[z][yy][x]==c)
+                uCount++;
+            else
+                break;
+        for(int yy=y-1; yy>=0;yy--)
+            if(boardy[z][yy][x]==c)
+                uCount++;
+            else
+                break;
+        if(uCount>=needed){
+            winType="Up";
+            winner=c;
+
+            return new Move(x,z);
+        }
+
+
+// diagonals on the x-plane
+        // both increasing
+        int idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(z+change<Z_SIZE && y+change<Y_SIZE && boardy[z+change][y+change][x]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(z-change>=0 && y-change>=0 && boardy[z-change][y-change][x]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="x-plane diagonal #1";
+            winner=c;
+
+            return new Move(x,z+idc);
+        }
+        // changing differently
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(z-change>=0 && y+change<Y_SIZE && boardy[z-change][y+change][x]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(z+change<Z_SIZE && y-change>=0 && boardy[z+change][y-change][x]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="x-plane diagonal #2";
+            winner=c;
+
+            return new Move(x,z+idc);
+        }
+
+// diagonals on the y-plane
+        // both increasing
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(z+change<Z_SIZE && x+change<X_SIZE && boardy[z+change][y][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(z-change>=0 && x-change>=0 && boardy[z-change][y][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winner=c;
+            winType="y-plane diagonal #1";
+
+            return placedAt;
+        }
+        // changing differently
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(z-change>=0 && x+change<X_SIZE && boardy[z-change][y][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(z+change<Z_SIZE && x-change>=0 && boardy[z+change][y][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="y-plane diagonal #2";
+            winner=c;
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(z-change>=0 && x+change<X_SIZE && boardy[z-change][y][x+change]==c)
+                    boardy[z-change][y][x+change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(z+change<Z_SIZE && x-change>=0 && boardy[z+change][y][x-change]==c)
+                    boardy[z+change][y][x-change]=lowerCase;
+                else
+                    break;
+
+            return placedAt;
+        }
+
+// diagonals on the z-plane
+        // both increasing
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x+change<X_SIZE && boardy[z][y+change][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x-change>=0 && boardy[z][y-change][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="z-plane diagonal #1";
+            winner=c;
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y+change<Y_SIZE && x+change<X_SIZE && boardy[z][y+change][x+change]==c)
+                    boardy[z][y+change][x+change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y-change>=0 && x-change>=0 && boardy[z][y-change][x-change]==c)
+                    boardy[z][y-change][x-change]=lowerCase;
+                else
+                    break;
+            return placedAt;
+        }
+        // changing differently
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x+change<X_SIZE && boardy[z][y-change][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x-change>=0 && boardy[z][y+change][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="z-plane diagonal #2";
+            winner=c;
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y-change>=0 && x+change<X_SIZE && boardy[z][y-change][x+change]==c)
+                    boardy[z][y-change][x+change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y+change<Y_SIZE && x-change>=0 && boardy[z][y+change][x-change]==c)
+                    boardy[z][y+change][x-change]=lowerCase;
+                else
+                    break;
+
+            return placedAt;
+        }
+
+// special digonal 1 + + +
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x+change<X_SIZE && z+change<Z_SIZE && boardy[z+change][y+change][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x-change>=0 && z-change>=0 &&boardy[z-change][y-change][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="special diagonal #1 + + +";
+            winner=c;
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y+change<Y_SIZE && x+change<X_SIZE && z+change<Z_SIZE && boardy[z+change][y+change][x+change]==c)
+                    boardy[z+change][y+change][x+change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y-change>=0 && x-change>=0 && z-change>=0 &&boardy[z-change][y-change][x-change]==c)
+                    boardy[z-change][y-change][x-change]=lowerCase;
+                else
+                    break;
+            return placedAt;
+        }
+
+        // special digonal 2 + + -
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x+change<X_SIZE && z-change>=0 && boardy[z-change][y+change][x+change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x-change>=0 && z+change<Z_SIZE &&boardy[z+change][y-change][x-change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winner=c;
+            winType="special diagonal #2 + + -";
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y+change<Y_SIZE && x+change<X_SIZE && z-change>=0 && boardy[z-change][y+change][x+change]==c)
+                    boardy[z-change][y+change][x+change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y-change>=0 && x-change>=0 && z+change<Z_SIZE &&boardy[z+change][y-change][x-change]==c)
+                    boardy[z+change][y-change][x-change]=lowerCase;
+                else
+                    break;
+            return placedAt;
+        }
+
+// special diagonal 3 - + -
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x-change>=0 && z-change>=0 && boardy[z-change][y+change][x-change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x+change<X_SIZE && z+change<Z_SIZE &&boardy[z+change][y-change][x+change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winner=c;
+            winType="special diagonal #3 - + -";
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y+change<Y_SIZE && x-change>=0 && z-change>=0 && boardy[z-change][y+change][x-change]==c)
+                    boardy[z-change][y+change][x-change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y-change>=0 && x+change<X_SIZE && z+change<Z_SIZE &&boardy[z+change][y-change][x+change]==c)
+                    boardy[z+change][y-change][x+change]=lowerCase;
+                else
+                    break;
+            return placedAt;
+        }
+
+// special diagonal 4 - + +
+        idc=1;
+        for(int change=1; change<=change+4;change++)
+            if(y+change<Y_SIZE && x-change>=0 && z+change<Z_SIZE && boardy[z+change][y+change][x-change]==c)
+                idc++;
+            else
+                break;
+        for(int change=1; change<=change+4;change++)
+            if(y-change>=0 && x+change<X_SIZE && z-change>=0 &&boardy[z-change][y-change][x+change]==c)
+                idc++;
+            else
+                break;
+
+        if(idc>=needed){
+            winType="special diagonal #4 - + +";
+            winner=c;
+            char lowerCase = Character.toLowerCase(c);
+            for(int change=0; change<=change+4;change++)
+                if(y+change<Y_SIZE && x-change>=0 && z+change<Z_SIZE && boardy[z+change][y+change][x-change]==c)
+                    boardy[z+change][y+change][x-change]=lowerCase;
+                else
+                    break;
+            for(int change=1; change<=change+4;change++)
+                if(y-change>=0 && x+change<X_SIZE && z-change>=0 &&boardy[z-change][y-change][x+change]==c)
+                    boardy[z-change][y-change][x+change]=lowerCase;
+                else
+                    break;
+            return placedAt;
+        }
+    }
 }
