@@ -23,10 +23,10 @@ public class ClientMain
 		DisplayScreenV_AI ds = new DisplayScreenV_AI(board);
 		int mode = 0;
 		
-		//Player myAIasRed = new HumanPlayer("Varun",'R');
-		//Player myAIasBlue = new HumanPlayer("Varun",'B');
-		Player myAIasRed = new TRD1123('R');
-		Player myAIasBlue = new TRD1123('B');
+		Player myAIasRed = new HumanPlayer("Varun",'R');
+		Player myAIasBlue = new HumanPlayer("Varun",'B');
+		//Player myAIasRed = new TRD1123('R');
+		//Player myAIasBlue = new TRD1123('B');
 		String myAI_Name = myAIasRed.getName();
 		String opponentName = "";
 		Player currentlyPlaying = null;

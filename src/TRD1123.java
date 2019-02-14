@@ -106,13 +106,14 @@ public class TRD1123 extends Player {
                         bestMove=tempMove;
                         System.out.println("WE JUST SCOORREED");
                     }*/
-                    tempMove=b.score(boardy, opponentLetter, z,y,x);
+                    tempMove=b.potentialTaker(boardy, new Move(x,z), opponentLetter, letter);
                     if(tempMove!=null&&!board.isFull(tempMove)) {
                         bestMove=tempMove;
-                        System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
+                        //System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
                     }
 
                     if(bestMove==null) {
+                        System.out.println("bestMove is null.");
                         tempMove=new Move(x,z);
                         if(!board.isFull(tempMove)) {
                             location = boardy.makeMove(tempMove, letter);
@@ -627,7 +628,7 @@ class BoardScorer {
         return new Location(l.x + x, l.y + y, l.z + z);
     }
     
-    public Move potentialTaker(Board board, Move move, char c) {// THIS IS JUST TULLY'S BOARDSCORE METHOD REWRITTEN TO FIT OUR MOVE
+    public Move potentialTaker(Board board, Move move, char c, char opponentLetter) {// THIS IS JUST TULLY'S BOARDSCORE METHOD REWRITTEN TO FIT OUR MOVE
         //TODO 2/13/19
 
         int z=move.getZ();
@@ -654,8 +655,12 @@ class BoardScorer {
         if(hCount>=needed){
             winType="Horizontal";
             winner=c;
-
-            return new Move(x+hCount,z);
+            if(boardy[z][y][x+hCount]==' ') {
+                return new Move(x + hCount, z);
+            }
+            else if(boardy[z][y][x-hCount]==' ') {
+                return new Move(x-hCount, z);
+            }
 
         }
 
@@ -675,8 +680,12 @@ class BoardScorer {
             winType="depth";
             winner=c;
 
-
-            return new Move(x,z+bCount);
+            if(boardy[z+bCount][y][x]==' ') {
+                return new Move(x, z + bCount);
+            }
+            else if(boardy[z-bCount][y][x]==' ') {
+                return new Move(x,z-bCount);
+            }
         }
 
         // up
@@ -716,8 +725,12 @@ class BoardScorer {
         if(idc>=needed){
             winType="x-plane diagonal #1";
             winner=c;
-
-            return new Move(x,z+idc);
+            if(boardy[z+idc][y][x]==' ') {
+                return new Move(x, z + idc);
+            }
+            else if(boardy[z-idc][y][x]==' ') {
+                return new Move(x,z-idc);
+            }
         }
         // changing differently
         idc=1;
@@ -736,7 +749,12 @@ class BoardScorer {
             winType="x-plane diagonal #2";
             winner=c;
 
-            return new Move(x,z+idc);
+            if(boardy[z+idc][y][x]==' ') {
+                return new Move(x, z + idc);
+            }
+            else if(boardy[z-idc][y][x]==' ') {
+                return new Move(x,z-idc);
+            }
         }
 
 // diagonals on the y-plane
@@ -757,7 +775,12 @@ class BoardScorer {
             winner=c;
             winType="y-plane diagonal #1";
 
-            return placedAt;
+            if(boardy[z+idc][y][x+idc]==' ') {
+                return new Move(x+idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x-idc]==' ') {
+                return new Move(x-idc,z-idc);
+            }
         }
         // changing differently
         idc=1;
@@ -775,19 +798,12 @@ class BoardScorer {
         if(idc>=needed){
             winType="y-plane diagonal #2";
             winner=c;
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(z-change>=0 && x+change<X_SIZE && boardy[z-change][y][x+change]==c)
-                    boardy[z-change][y][x+change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(z+change<Z_SIZE && x-change>=0 && boardy[z+change][y][x-change]==c)
-                    boardy[z+change][y][x-change]=lowerCase;
-                else
-                    break;
-
-            return placedAt;
+            if(boardy[z+idc][y][x-idc]==' ') {
+                return new Move(x-idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x+idc]==' ') {
+                return new Move(x+idc,z-idc);
+            }
         }
 
 // diagonals on the z-plane
@@ -807,18 +823,12 @@ class BoardScorer {
         if(idc>=needed){
             winType="z-plane diagonal #1";
             winner=c;
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y+change<Y_SIZE && x+change<X_SIZE && boardy[z][y+change][x+change]==c)
-                    boardy[z][y+change][x+change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y-change>=0 && x-change>=0 && boardy[z][y-change][x-change]==c)
-                    boardy[z][y-change][x-change]=lowerCase;
-                else
-                    break;
-            return placedAt;
+            if(boardy[z][y][x+idc]==' ') {
+                return new Move(x+idc, z);
+            }
+            else if(boardy[z][y][x-idc]==' ') {
+                return new Move(x-idc,z);
+            }
         }
         // changing differently
         idc=1;
@@ -836,19 +846,12 @@ class BoardScorer {
         if(idc>=needed){
             winType="z-plane diagonal #2";
             winner=c;
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y-change>=0 && x+change<X_SIZE && boardy[z][y-change][x+change]==c)
-                    boardy[z][y-change][x+change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y+change<Y_SIZE && x-change>=0 && boardy[z][y+change][x-change]==c)
-                    boardy[z][y+change][x-change]=lowerCase;
-                else
-                    break;
-
-            return placedAt;
+            if(boardy[z][y][x-idc]==' ') {
+                return new Move(x-idc, z);
+            }
+            else if(boardy[z][y][x+idc]==' ') {
+                return new Move(x+idc,z);
+            }
         }
 
 // special digonal 1 + + +
@@ -867,18 +870,12 @@ class BoardScorer {
         if(idc>=needed){
             winType="special diagonal #1 + + +";
             winner=c;
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y+change<Y_SIZE && x+change<X_SIZE && z+change<Z_SIZE && boardy[z+change][y+change][x+change]==c)
-                    boardy[z+change][y+change][x+change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y-change>=0 && x-change>=0 && z-change>=0 &&boardy[z-change][y-change][x-change]==c)
-                    boardy[z-change][y-change][x-change]=lowerCase;
-                else
-                    break;
-            return placedAt;
+            if(boardy[z+idc][y][x+idc]==' ') {
+                return new Move(x+idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x-idc]==' ') {
+                return new Move(x-idc,z-idc);
+            }
         }
 
         // special digonal 2 + + -
@@ -897,18 +894,13 @@ class BoardScorer {
         if(idc>=needed){
             winner=c;
             winType="special diagonal #2 + + -";
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y+change<Y_SIZE && x+change<X_SIZE && z-change>=0 && boardy[z-change][y+change][x+change]==c)
-                    boardy[z-change][y+change][x+change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y-change>=0 && x-change>=0 && z+change<Z_SIZE &&boardy[z+change][y-change][x-change]==c)
-                    boardy[z+change][y-change][x-change]=lowerCase;
-                else
-                    break;
-            return placedAt;
+
+            if(boardy[z+idc][y][x-idc]==' ') {
+                return new Move(x-idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x+idc]==' ') {
+                return new Move(x+idc,z-idc);
+            }
         }
 
 // special diagonal 3 - + -
@@ -927,18 +919,13 @@ class BoardScorer {
         if(idc>=needed){
             winner=c;
             winType="special diagonal #3 - + -";
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y+change<Y_SIZE && x-change>=0 && z-change>=0 && boardy[z-change][y+change][x-change]==c)
-                    boardy[z-change][y+change][x-change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y-change>=0 && x+change<X_SIZE && z+change<Z_SIZE &&boardy[z+change][y-change][x+change]==c)
-                    boardy[z+change][y-change][x+change]=lowerCase;
-                else
-                    break;
-            return placedAt;
+
+            if(boardy[z+idc][y][x+idc]==' ') {
+                return new Move(x+idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x-idc]==' ') {
+                return new Move(x-idc,z-idc);
+            }
         }
 
 // special diagonal 4 - + +
@@ -957,18 +944,13 @@ class BoardScorer {
         if(idc>=needed){
             winType="special diagonal #4 - + +";
             winner=c;
-            char lowerCase = Character.toLowerCase(c);
-            for(int change=0; change<=change+4;change++)
-                if(y+change<Y_SIZE && x-change>=0 && z+change<Z_SIZE && boardy[z+change][y+change][x-change]==c)
-                    boardy[z+change][y+change][x-change]=lowerCase;
-                else
-                    break;
-            for(int change=1; change<=change+4;change++)
-                if(y-change>=0 && x+change<X_SIZE && z-change>=0 &&boardy[z-change][y-change][x+change]==c)
-                    boardy[z-change][y-change][x+change]=lowerCase;
-                else
-                    break;
-            return placedAt;
+            if(boardy[z+idc][y][x-idc]==' ') {
+                return new Move(x-idc, z + idc);
+            }
+            else if(boardy[z-idc][y][x+idc]==' ') {
+                return new Move(x+idc,z-idc);
+            }
         }
+        return null;
     }
 }
