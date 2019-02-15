@@ -75,13 +75,21 @@ public class TRD1123 extends Player {
             }
 
         }
-        if(bestMove!=null) {
+        if(bestMove!=null&&!board.isFull(bestMove)) {
             return bestMove;
         }
         else {
-            System.out.println("NOOOOO I'm NULLLLLL");
-            return null;
+            for(int z=0;z<Z_SIZE;z++) {
+                for(int y=0;y<Y_SIZE;y++) {
+                    for(int x=0;x<Z_SIZE;x++) {
+                        if(!board.isFull(new Move(x,z))) {
+                            return new Move(x,z);
+                        }
+                    }
+                }
+            }
         }
+        return null;
     }
 
     public Player freshCopy () {
@@ -125,93 +133,93 @@ class BoardScorer {
 
 
         if((checkXP(l,letter,1))>trigger) {
-            if(l.x+(checkXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y][l.x+(checkXP(l,letter,1))]!=opponentLetter) {
+            if(l.x+(checkXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y][l.x+(checkXP(l,letter,1))]=='-') {
                 return new Move(l.x+(checkXP(l,letter,1)),l.z);
             }
         }
         if((checkXM(l,letter,1))>trigger) {
-            if(l.x-(checkXM(l,letter,1))>=0&&board.getBoard()[l.z][l.y][l.x-(checkXM(l,letter,1))]!=opponentLetter) {
+            if(l.x-(checkXM(l,letter,1))>=0&&board.getBoard()[l.z][l.y][l.x-(checkXM(l,letter,1))]=='-') {
                 return new Move(l.x-(checkXM(l,letter,1)),l.z);
             }
         }
         if(checkYP(l,letter,1)>trigger) {
-            if(l.y+(checkYP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYP(l,letter,1))][l.x]!=opponentLetter) {
+            if(l.y+(checkYP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYP(l,letter,1))][l.x]=='-') {
                 return new Move(l.x,l.z);
             }
         }
         if((checkYM(l,letter,1))>trigger) {
-            if(l.y-(checkYM(l,letter,1))>=0&&board.getBoard()[l.z][l.y-(checkYM(l,letter,1))][l.x]!=opponentLetter) {
+            if(l.y-(checkYM(l,letter,1))>=0&&board.getBoard()[l.z][l.y-(checkYM(l,letter,1))][l.x]=='-') {
                 return new Move(l.x,l.z);
             }
         }
         if((checkZP(l,letter,1))>trigger) {
-            if(l.z+(checkZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkZP(l,letter,1))][l.y][l.x]!=opponentLetter) {
+            if(l.z+(checkZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkZP(l,letter,1))][l.y][l.x]=='-') {
                 return new Move(x,z+(checkZP(l,letter,1)));
             }
         }
         if((checkZM(l,letter,1))>trigger) {
-            if(l.z-(checkZM(l,letter,1))>=0&&board.getBoard()[l.z-(checkZM(l,letter,1))][l.y][l.x]!=opponentLetter) {
+            if(l.z-(checkZM(l,letter,1))>=0&&board.getBoard()[l.z-(checkZM(l,letter,1))][l.y][l.x]=='-') {
                 return new Move(x,z-(checkZM(l,letter,1)));
             }
 
         }
         if((checkYPZP(l,letter,1))>trigger) {
-            if(l.z+(checkYPZP(l,letter,1))<Z_SIZE&&l.y+(checkYPZP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z+(checkYPZP(l,letter,1))][l.y+(checkYPZP(l,letter,1))][l.x]!=opponentLetter) {
+            if(l.z+(checkYPZP(l,letter,1))<Z_SIZE&&l.y+(checkYPZP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z+(checkYPZP(l,letter,1))][l.y+(checkYPZP(l,letter,1))][l.x]=='-') {
                 return new Move(x, l.z+(checkYPZP(l,letter,1)));
             }
         }
         if((checkYPZM(l,letter,1))>trigger) {
-            if (l.y + (checkYPZM(l, letter, 1)) < Y_SIZE && l.z - (checkYPZM(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZM(l,letter,1))][l.y+(checkYPZM(l,letter,1))][l.x]!=opponentLetter) {
+            if (l.y + (checkYPZM(l, letter, 1)) < Y_SIZE && l.z - (checkYPZM(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZM(l,letter,1))][l.y+(checkYPZM(l,letter,1))][l.x]=='-') {
                 return new Move(x,z+l.z-(checkYPZM(l,letter,1)));
             }
         }
         if((checkZPXP(l,letter,1))>trigger) {
-            if(l.z+(checkZPXP(l,letter,1))<Z_SIZE&&l.x+(checkZPXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z+(checkZPXP(l,letter,1))][l.y][l.y+(checkZPXP(l,letter,1))]!=opponentLetter) {
+            if(l.z+(checkZPXP(l,letter,1))<Z_SIZE&&l.x+(checkZPXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z+(checkZPXP(l,letter,1))][l.y][l.x+(checkZPXP(l,letter,1))]=='-') {
                 return new Move(x+(checkZPXP(l,letter,1)),z+(checkZPXP(l,letter,1)));
             }
         }
         if((checkZPXM(l,letter,1))>trigger) {
-            if(l.z+(checkZPXM(l,letter,1))<Z_SIZE&&l.x-(checkZPXM(l,letter,1))>=0&&board.getBoard()[l.z+(checkZPXM(l,letter,1))][l.y][l.x+(checkZPXM(l,letter,1))]!=opponentLetter) {
+            if(l.z+(checkZPXM(l,letter,1))<Z_SIZE&&l.x-(checkZPXM(l,letter,1))>=0&&board.getBoard()[l.z+(checkZPXM(l,letter,1))][l.y][l.x-(checkZPXM(l,letter,1))]=='-') {
                 return new Move(x-(checkZPXM(l,letter,1)),z+(checkZPXM(l,letter,1)));
             }
         }
         if((checkYPXP(l,letter,1))>trigger) {
-            if(l.x+(checkYPXP(l,letter,1))<X_SIZE&&l.y+(checkYPXP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYPXP(l,letter,1))][l.x+(checkYPXP(l,letter,1))]!=opponentLetter) {
+            if(l.x+(checkYPXP(l,letter,1))<X_SIZE&&l.y+(checkYPXP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYPXP(l,letter,1))][l.x+(checkYPXP(l,letter,1))]=='-') {
                 return new Move(l.x+(checkYPXP(l,letter,1)),z);
             }
         }
         if((checkYMXP(l,letter,1))>trigger) {
-            if(l.y-(checkYMXP(l,letter,1))>=0&&l.x+(checkYMXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y-(checkYMXP(l,letter,1))][l.x+(checkYMXP(l,letter,1))]!=opponentLetter) {
+            if(l.y-(checkYMXP(l,letter,1))>=0&&l.x+(checkYMXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y-(checkYMXP(l,letter,1))][l.x+(checkYMXP(l,letter,1))]=='-') {
                 return new Move(l.x+(checkYMXP(l,letter,1)),l.z);
             }
         }
         if((checkYMZP(l,letter,1))>trigger) {
-            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z+(checkYMZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]!=opponentLetter) {
+            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z+(checkYMZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]=='-') {
                 return new Move(l.x,l.z+(checkYMZP(l,letter,1)));
             }
         }
         if ((checkYMZM(l,letter,1))>trigger) {
-            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z-(checkYMZP(l,letter,1))>=0&&board.getBoard()[l.z-(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]!=opponentLetter) {
+            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z-(checkYMZP(l,letter,1))>=0&&board.getBoard()[l.z-(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]=='-') {
                 return new Move(l.x,l.z-(checkYMZP(l,letter,1)));
             }
         }
         if((checkYMZPXP(l,letter,1))>trigger) {
-            if(l.x+(checkYMZPXP(l,letter,1))<X_SIZE&&l.y-(checkYMZPXP(l,letter,1))>=0&&l.z+(checkYMZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZPXP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x+(checkYMZPXP(l,letter,1))]!=opponentLetter) {
+            if(l.x+(checkYMZPXP(l,letter,1))<X_SIZE&&l.y-(checkYMZPXP(l,letter,1))>=0&&l.z+(checkYMZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZPXP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x+(checkYMZPXP(l,letter,1))]=='-') {
                 return new Move(l.x+(checkYMZPXP(l,letter,1)),l.z+(checkYMZPXP(l,letter,1)));
             }
         }
         if((checkYPZMXP(l,letter,1))>trigger) {
-            if (l.x+(checkYPZMXP(l,letter,1))<X_SIZE&&l.y + (checkYPZMXP(l, letter, 1)) < Y_SIZE && l.z - (checkYPZMXP(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZMXP(l,letter,1))][l.y+(checkYPZMXP(l,letter,1))][l.x+(checkYPZMXP(l,letter,1))]!=opponentLetter) {
+            if (l.x+(checkYPZMXP(l,letter,1))<X_SIZE&&l.y + (checkYPZMXP(l, letter, 1)) < Y_SIZE && l.z - (checkYPZMXP(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZMXP(l,letter,1))][l.y+(checkYPZMXP(l,letter,1))][l.x+(checkYPZMXP(l,letter,1))]=='-') {
                 return new Move(x+(checkYPZMXP(l,letter,1)),z+l.z-(checkYPZMXP(l,letter,1)));
             }
         }
         if((checkYPZPXM(l,letter,1))>trigger) {
-            if(l.x-(checkYPZPXM(l,letter,1))>=0&&l.y+(checkYPZPXM(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXM(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXM(l,letter,1))][l.y+(checkYPZPXM(l,letter,1))][l.x-(checkYPZPXM(l,letter,1))]!=opponentLetter) {
+            if(l.x-(checkYPZPXM(l,letter,1))>=0&&l.y+(checkYPZPXM(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXM(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXM(l,letter,1))][l.y+(checkYPZPXM(l,letter,1))][l.x-(checkYPZPXM(l,letter,1))]=='-') {
                 return new Move(l.x-(checkYPZPXM(l,letter,1)),l.z+(checkYPZPXM(l,letter,1)));
             }
         }
         if((checkYPZPXP(l,letter,1))>trigger) {
-            if(l.x+(checkYPZPXP(l,letter,1))<X_SIZE&&l.y+(checkYPZPXP(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXP(l,letter,1))][l.y+(checkYPZPXP(l,letter,1))][l.x+(checkYPZPXP(l,letter,1))]!=opponentLetter) {
+            if(l.x+(checkYPZPXP(l,letter,1))<X_SIZE&&l.y+(checkYPZPXP(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXP(l,letter,1))][l.y+(checkYPZPXP(l,letter,1))][l.x+(checkYPZPXP(l,letter,1))]=='-') {
                 return new Move(l.x+(checkYPZPXP(l,letter,1)),l.z+(checkYPZPXP(l,letter,1)));
             }
         }
