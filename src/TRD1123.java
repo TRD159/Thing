@@ -15,6 +15,7 @@ public class TRD1123 extends Player {
     public static final char EMPTY = '-', RED = 'R', BLUE = 'B', PLAYING = '-', TIE = 'T';
     public static final int X_SIZE = 8, Y_SIZE = 7, Z_SIZE = 8;
     char[][][] board;
+    Location location = null;
     Board boardy=null;
     String score = "";
     BoardScorer b=new BoardScorer();
@@ -30,112 +31,42 @@ public class TRD1123 extends Player {
     }
 
     public Move getMove(Board board) {
-        //System.out.println("fdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfd");
         this.boardy = new Board(board);
-        //this.board = new Board(board).getBoard();
-        //char[][][] baord = new char[8][7][8];/
-        /*
-        boolean first = true;*/
-        int lastScore = 0;/*
-        for(int x = 0; x < X_SIZE; x++) {
-            for(int z = 0; z < Z_SIZE; z++) {
-                if(board.getBoard()[z][0][x] == getLetter())
-                    first = false;
-            }
-        }
-        if(first)
-            return new Move((int)(Math.random() * 8), (int)(Math.random() * 8));*/
+        int lastScore = 0;
+        this.board=board.getBoard();
         char opponentLetter = (letter == 'R') ? 'B' : 'R';
-        if(letter=='R') {
-            opponentLetter='B';
-        }
-        else{
-            opponentLetter='R';
-        }
-
-        Location location = null;
-        //bestMove = new Move((int) Math.random() * 7, (int) Math.random() * 7);
-        Move lastMove = null;
-        /*checkr: for (int z = 0; z < board.getBoard().length; z++) {
-            for (int x = 0; x < board.getBoard()[0][0].length; x++) {
-                //I'm dying in here
-
-
-                if(!boardy.isFull(new Move(x, z)))
-                    location = boardy.makeMove(new Move(x, z), opponentLetter);
-
-                if(boardyGrader.boardScorer(boardy, opponentLetter) > 1000)
-                    return new Move(location.x, location.z);
-
-
-                if (!(board.isFull(new Move(x, z)))) {
-                    location = board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
-                }
-                if (location!=null&&board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
-                    //opponentLetter = board.getBoard()[location.z][location.y][location.x];
-                }
-                BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
-                //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
-                int myScore = boardGrader.boardScorer(board, letter);
-                int theirScore = boardGrader.boardScorer(board, opponentLetter);
-                //System.out.println(x + ", " + z + ": " + (myScore - theirScore));
-                if (myScore - theirScore > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
-                    lastMove = new Move(x, z);
-                    if (!board.isFull(new Move(x, z))) {
-                        bestMove = new Move(location.x, location.z);
+        Move tempMove=null;
+        boolean firstMove=true;
+        for(int x=0;x<X_SIZE;x++) {
+            for(int y=0;y<Y_SIZE;y++) {
+                for(int z=0;z<Z_SIZE;z++) {
+                    if(board.getBoard()[z][y][x]!='-') {
+                        firstMove=false;
                     }
                 }
-                lastScore = myScore - theirScore;
-                if (location != null) {
-                    board.setLocation(location, Board.EMPTY);
-                }
             }
         }
-        if (!board.isFull(bestMove)) {
-            return bestMove;//returns what boardGrader's best score is-VK
+        if(firstMove) {
+            System.out.println("Its new woohoo");
+            return new Move((int)Math.random()*7,(int)Math.random()*7);
         }
-        return null;
-        //return lookAhead();*/
-        Move tempMove=null;
         for (int x = 0; x < X_SIZE; x++) {
             for (int y = 0; y < Y_SIZE; y++) {
                 for (int z = 0; z<Z_SIZE; z++) {
-                    /*tempMove = b.score(board, letter, x, y, z);
-                    if (b.isOpportunity()) {
-                        if (!board.isFull(tempMove)) {
-                            bestMove = tempMove;
-                        }
-                    } else {
-                        tempMove = b.score(board, opponentLetter, x, y, z);
-                        if(b.isOpportunity()) {
-                            if (!board.isFull(tempMove)) {
-                                bestMove = tempMove;
-                            }
-                        }
-                    }*/
-
-                    //tempMove=b.score(boardy, letter, x,y,z);
-                    /*if(tempMove!=null&&!board.isFull(tempMove)) {
-                        bestMove=tempMove;
-                        System.out.println("WE JUST SCOORREED");
-                    }*/
-                     tempMove=b.score(boardy, opponentLetter, x,y,z, letter);
+                    tempMove=b.score(board, opponentLetter, x,y,z, letter);
                     if(tempMove!=null&&!board.isFull(tempMove)) {
                         bestMove=tempMove;
-
-                        //System.out.println("bestMove =tempMove.");
-                        //System.out.println("\t\t\t\t\t\tX: "+bestMove.getX()+" Z:"+bestMove.getZ());
                     }
 
                     if(bestMove==null) {
                         System.out.println("bestMove is null.");
                         tempMove=new Move(x,z);
-                        if(!board.isFull(tempMove)) {
-                            location = boardy.makeMove(tempMove, letter);
+                        if(tempMove!=null&&!board.isFull(tempMove)) {
+                            location = board.makeMove(tempMove, letter);
                         }
-                        BoardGrader boardyGrader = new BoardGrader(boardy, location, letter, 0, 0);
-                        if(boardyGrader.boardScorer(boardy,letter)>lastScore) {
-                            lastScore=boardyGrader.boardScorer(boardy,letter);
+                        BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
+                        if(boardGrader.boardScorer(board,letter)>lastScore) {
+                            lastScore=boardGrader.boardScorer(board,letter);
                             bestMove=tempMove;
                         }
                     }
@@ -149,8 +80,8 @@ public class TRD1123 extends Player {
         }
         else {
             System.out.println("NOOOOO I'm NULLLLLL");
+            return null;
         }
-        return null;
     }
 
     public Player freshCopy () {
@@ -159,75 +90,6 @@ public class TRD1123 extends Player {
 
     public String getScore () {
         return score;
-    }
-
-
-
-    public Move lookAhead() {
-        Move bestMove=null;
-        //TODO: JUST DO THIS
-        List<scoredMove> bestMoves = new ArrayList<>();
-        int[] bestScores = new int[4];
-        ArrayList<scoredMove> moves=makeMove(bestMoves,bestScores,'-',null,boardy);
-        System.out.println(moves.size());
-        int bestScore=0;
-        for(scoredMove m:moves) {
-            if(m.getScore()>bestScore) {
-                bestMove=m;
-            }
-        }
-        return (Move)bestMove;
-    }
-
-    /*This method gets the best four moves available to the player at the time.
-    In case you're worried about scoredMove, it's just move, except that it contains a score value and a copy of the move that was processed before it.
-    Basically, it's a binary search tree.*/
-
-    public ArrayList<scoredMove> makeMove(List<scoredMove> bestMoves, int[] bestScores, char c, scoredMove bestMove,Board board) {
-        //this.board = new Board(board).getBoard();
-        int lastScore = 0;
-        char opponentLetter = (letter == 'R') ? 'B' : 'R';
-        Location location = null;
-        //bestMove = (scoredMove)new scoredMove((int) Math.random() * 7, (int) Math.random() * 7);
-        Move lastMove = null;
-        for (int z = 0; z < board.getBoard().length; z++) {
-            for (int x = 0; x < board.getBoard()[0][0].length; x++) {
-                if (!(board.isFull(new Move(x, z)))) {
-                    location = board.makeMove(new Move(x, z), letter);//drops piece into board for grading later-VK
-                }
-                if (location!=null&&board.getBoard()[location.z][location.y][location.x] != '-' && board.getBoard()[location.z][location.y][location.x] != letter) {
-                    //opponentLetter = board.getBoard()[location.z][location.y][location.x];
-                }
-                BoardGrader boardGrader = new BoardGrader(board, location, letter, 0, 0);
-                //System.out.println(x + ", " + z + ":" + boardGrader.boardScorer(board, letter));
-                int myScore = boardGrader.boardScorer(board, letter);
-                int theirScore = boardGrader.boardScorer(board, opponentLetter);
-                //System.out.println(x + ", " + z + ": " + (myScore - theirScore));
-                if (myScore - theirScore > lastScore) {//checks to see if this next move is better than our last. If so, it becomes bestMove, and lastScore equals boardScorer(board)-VK
-                    lastMove = new Move(x, z);
-                    if (!board.isFull(new Move(x, z))) {
-                        bestMoves.add(new scoredMove(x, z, (myScore-theirScore), bestMove));
-                        while(bestMoves.size() > 3) {
-                            int a = 0;
-                            int worstScore = 2147483647; //The largest possible integer value there is
-                            int worstMove = 0;
-                            for(; a < bestMoves.size(); a++) {
-                                if(bestMoves.get(a).getScore() < worstScore) {
-                                    worstScore = bestMoves.get(a).getScore();
-                                    worstMove = a;
-                                }
-                            }
-                            bestMoves.remove(worstMove);
-                        }
-                    }
-                }
-                lastScore = myScore - theirScore;
-                if (location != null) {
-                    board.setLocation(location, Board.EMPTY);
-                }
-            }
-        }
-        return (ArrayList)bestMoves;
     }
 }
 
@@ -251,21 +113,109 @@ class BoardScorer {
     boolean opportunity=false;
     Method m= null;
     Class<?>className;
-    int maxCount=3;
 
     public boolean isOpportunity() {
         return opportunity;
     }
 
     public Move score(Board board, char letter, int x, int y, int z, char opponentLetter) {
-        int trigger=4;
+        int trigger=3;
         Location l= new Location(x,y,z);
+        this.board=board.getBoard();
 
-        if(checkXP(l,letter,1)>maxCount) {
-            if(l.x+checkXP(l,letter,1)<X_SIZE&&board.getBoard()[l.z][l.y][l.x+checkXP(l,letter,1)]!=opponentLetter) {
-                return new Move(l.x+checkXP(l,letter,1),l.z);
+
+        if((checkXP(l,letter,1))>trigger) {
+            if(l.x+(checkXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y][l.x+(checkXP(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x+(checkXP(l,letter,1)),l.z);
             }
         }
+        if((checkXM(l,letter,1))>trigger) {
+            if(l.x-(checkXM(l,letter,1))>=0&&board.getBoard()[l.z][l.y][l.x-(checkXM(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x-(checkXM(l,letter,1)),l.z);
+            }
+        }
+        if(checkYP(l,letter,1)>trigger) {
+            if(l.y+(checkYP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYP(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(l.x,l.z);
+            }
+        }
+        if((checkYM(l,letter,1))>trigger) {
+            if(l.y-(checkYM(l,letter,1))>=0&&board.getBoard()[l.z][l.y-(checkYM(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(l.x,l.z);
+            }
+        }
+        if((checkZP(l,letter,1))>trigger) {
+            if(l.z+(checkZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkZP(l,letter,1))][l.y][l.x]!=opponentLetter) {
+                return new Move(x,z+(checkZP(l,letter,1)));
+            }
+        }
+        if((checkZM(l,letter,1))>trigger) {
+            if(l.z-(checkZM(l,letter,1))>=0&&board.getBoard()[l.z-(checkZM(l,letter,1))][l.y][l.x]!=opponentLetter) {
+                return new Move(x,z-(checkZM(l,letter,1)));
+            }
+
+        }
+        if((checkYPZP(l,letter,1))>trigger) {
+            if(l.z+(checkYPZP(l,letter,1))<Z_SIZE&&l.y+(checkYPZP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z+(checkYPZP(l,letter,1))][l.y+(checkYPZP(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(x, l.z+(checkYPZP(l,letter,1)));
+            }
+        }
+        if((checkYPZM(l,letter,1))>trigger) {
+            if (l.y + (checkYPZM(l, letter, 1)) < Y_SIZE && l.z - (checkYPZM(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZM(l,letter,1))][l.y+(checkYPZM(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(x,z+l.z-(checkYPZM(l,letter,1)));
+            }
+        }
+        if((checkZPXP(l,letter,1))>trigger) {
+            if(l.z+(checkZPXP(l,letter,1))<Z_SIZE&&l.x+(checkZPXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z+(checkZPXP(l,letter,1))][l.y][l.y+(checkZPXP(l,letter,1))]!=opponentLetter) {
+                return new Move(x+(checkZPXP(l,letter,1)),z+(checkZPXP(l,letter,1)));
+            }
+        }
+        if((checkZPXM(l,letter,1))>trigger) {
+            if(l.z+(checkZPXM(l,letter,1))<Z_SIZE&&l.x-(checkZPXM(l,letter,1))>=0&&board.getBoard()[l.z+(checkZPXM(l,letter,1))][l.y][l.x+(checkZPXM(l,letter,1))]!=opponentLetter) {
+                return new Move(x-(checkZPXM(l,letter,1)),z+(checkZPXM(l,letter,1)));
+            }
+        }
+        if((checkYPXP(l,letter,1))>trigger) {
+            if(l.x+(checkYPXP(l,letter,1))<X_SIZE&&l.y+(checkYPXP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYPXP(l,letter,1))][l.x+(checkYPXP(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x+(checkYPXP(l,letter,1)),z);
+            }
+        }
+        if((checkYMXP(l,letter,1))>trigger) {
+            if(l.y-(checkYMXP(l,letter,1))>=0&&l.x+(checkYMXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y-(checkYMXP(l,letter,1))][l.x+(checkYMXP(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x+(checkYMXP(l,letter,1)),l.z);
+            }
+        }
+        if((checkYMZP(l,letter,1))>trigger) {
+            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z+(checkYMZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(l.x,l.z+(checkYMZP(l,letter,1)));
+            }
+        }
+        if ((checkYMZM(l,letter,1))>trigger) {
+            if(l.y-(checkYMZP(l,letter,1))>=0&&l.z-(checkYMZP(l,letter,1))>=0&&board.getBoard()[l.z-(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]!=opponentLetter) {
+                return new Move(l.x,l.z-(checkYMZP(l,letter,1)));
+            }
+        }
+        if((checkYMZPXP(l,letter,1))>trigger) {
+            if(l.x+(checkYMZPXP(l,letter,1))<X_SIZE&&l.y-(checkYMZPXP(l,letter,1))>=0&&l.z+(checkYMZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZPXP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x+(checkYMZPXP(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x+(checkYMZPXP(l,letter,1)),l.z+(checkYMZPXP(l,letter,1)));
+            }
+        }
+        if((checkYPZMXP(l,letter,1))>trigger) {
+            if (l.x+(checkYPZMXP(l,letter,1))<X_SIZE&&l.y + (checkYPZMXP(l, letter, 1)) < Y_SIZE && l.z - (checkYPZMXP(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZMXP(l,letter,1))][l.y+(checkYPZMXP(l,letter,1))][l.x+(checkYPZMXP(l,letter,1))]!=opponentLetter) {
+                return new Move(x+(checkYPZMXP(l,letter,1)),z+l.z-(checkYPZMXP(l,letter,1)));
+            }
+        }
+        if((checkYPZPXM(l,letter,1))>trigger) {
+            if(l.x-(checkYPZPXM(l,letter,1))>=0&&l.y+(checkYPZPXM(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXM(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXM(l,letter,1))][l.y+(checkYPZPXM(l,letter,1))][l.x-(checkYPZPXM(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x-(checkYPZPXM(l,letter,1)),l.z+(checkYPZPXM(l,letter,1)));
+            }
+        }
+        if((checkYPZPXP(l,letter,1))>trigger) {
+            if(l.x+(checkYPZPXP(l,letter,1))<X_SIZE&&l.y+(checkYPZPXP(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXP(l,letter,1))][l.y+(checkYPZPXP(l,letter,1))][l.x+(checkYPZPXP(l,letter,1))]!=opponentLetter) {
+                return new Move(l.x+(checkYPZPXP(l,letter,1)),l.z+(checkYPZPXP(l,letter,1)));
+            }
+        }
+
         return null;
     }
 
@@ -483,7 +433,7 @@ class BoardScorer {
         return new Location(l.x + x, l.y + y, l.z + z);
     }
     
-    public Move potentialTaker(Board board, Move move, char c, char opponentLetter) {// THIS IS JUST TULLY'S BOARDSCORE METHOD REWRITTEN TO FIT OUR MOVE
+    /*public Move potentialTaker(Board board, Move move, char c, char opponentLetter) {// THIS IS JUST TULLY'S BOARDSCORE METHOD REWRITTEN TO FIT OUR MOVE
         //TODO 2/13/19
 
         int z=move.getZ();
@@ -501,7 +451,7 @@ class BoardScorer {
                 hCount++;
             else
                 break;
-        for(int xx=x-1; xx>=0;xx--)
+        for(int xx=x-1); xx>=0;xx--)
             if(boardy[z][y][xx]==c)
                 hCount++;
             else
@@ -526,7 +476,7 @@ class BoardScorer {
                 bCount++;
             else
                 break;
-        for(int zz=z-1; zz>=0;zz--)
+        for(int zz=z-1); zz>=0;zz--)
             if(boardy[zz][y][x]==c)
                 bCount++;
             else
@@ -550,7 +500,7 @@ class BoardScorer {
                 uCount++;
             else
                 break;
-        for(int yy=y-1; yy>=0;yy--)
+        for(int yy=y-1); yy>=0;yy--)
             if(boardy[z][yy][x]==c)
                 uCount++;
             else
@@ -580,7 +530,7 @@ class BoardScorer {
         if(idc>=needed){
             winType="x-plane diagonal #1";
             winner=c;
-            if(boardy[z+(idc-1)][y][x]=='-') {
+            if(boardy[z+(idc-1))][y][x]=='-') {
                 return new Move(x, z + idc);
             }
             else if(boardy[z-(idc+1)][y][x]=='-') {
@@ -604,7 +554,7 @@ class BoardScorer {
             winType="x-plane diagonal #2";
             winner=c;
 
-            if(boardy[z+(idc-1)][y][x]=='-') {
+            if(boardy[z+(idc-1))][y][x]=='-') {
                 return new Move(x, z + idc);
             }
             else if(boardy[z-(idc+1)][y][x]=='-') {
@@ -630,8 +580,8 @@ class BoardScorer {
             winner=c;
             winType="y-plane diagonal #1";
 
-            if(boardy[z+(idc-1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1), z + idc);
+            if(boardy[z+(idc-1))][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)), z + idc);
             }
             else if(boardy[z-(idc+1)][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1),z-(idc+1));
@@ -653,11 +603,11 @@ class BoardScorer {
         if(idc>=needed){
             winType="y-plane diagonal #2";
             winner=c;
-            if(boardy[z+(idc-1)][y][x-(idc+1)]=='-') {
+            if(boardy[z+(idc-1))][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1), z + idc);
             }
-            else if(boardy[z-(idc+1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1),z-(idc+1));
+            else if(boardy[z-(idc+1)][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)),z-(idc+1));
             }
         }
 
@@ -678,8 +628,8 @@ class BoardScorer {
         if(idc>=needed){
             winType="z-plane diagonal #1";
             winner=c;
-            if(boardy[z][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1), z);
+            if(boardy[z][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)), z);
             }
             else if(boardy[z][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1),z);
@@ -704,8 +654,8 @@ class BoardScorer {
             if(boardy[z][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1), z);
             }
-            else if(boardy[z][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1),z);
+            else if(boardy[z][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)),z);
             }
         }
 
@@ -725,8 +675,8 @@ class BoardScorer {
         if(idc>=needed){
             winType="special diagonal #1 + + +";
             winner=c;
-            if(boardy[z+(idc-1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1), z + idc);
+            if(boardy[z+(idc-1))][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)), z + idc);
             }
             else if(boardy[z-(idc+1)][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1),z-(idc+1));
@@ -750,11 +700,11 @@ class BoardScorer {
             winner=c;
             winType="special diagonal #2 + + -";
 
-            if(boardy[z+(idc-1)-1][y][x-(idc+1)]=='-') {
+            if(boardy[z+(idc-1))-1)][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1), z + idc);
             }
-            else if(boardy[z-(idc+1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1),z-(idc+1));
+            else if(boardy[z-(idc+1)][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)),z-(idc+1));
             }
         }
 
@@ -775,8 +725,8 @@ class BoardScorer {
             winner=c;
             winType="special diagonal #3 - + -";
 
-            if(boardy[z+(idc-1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1), z + idc);
+            if(boardy[z+(idc-1))][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)), z + idc);
             }
             else if(boardy[z-(idc+1)][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1),z-(idc+1));
@@ -799,13 +749,13 @@ class BoardScorer {
         if(idc>=needed){
             winType="special diagonal #4 - + +";
             winner=c;
-            if(boardy[z+(idc-1)][y][x-(idc+1)]=='-') {
+            if(boardy[z+(idc-1))][y][x-(idc+1)]=='-') {
                 return new Move(x-(idc+1), z + idc);
             }
-            else if(boardy[z-(idc+1)][y][x+(idc-1)]=='-') {
-                return new Move(x+(idc-1),z-(idc+1));
+            else if(boardy[z-(idc+1)][y][x+(idc-1))]=='-') {
+                return new Move(x+(idc-1)),z-(idc+1));
             }
         }
         return null;
-    }
+    }*/
 }

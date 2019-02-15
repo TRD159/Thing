@@ -5,7 +5,7 @@ import java.util.*;
 
 public class ClientMain
 {
-	public static final String ip = "T308030";
+	public static final String ip = "127.0.0.1";
 
 	public static final int port = 8003;
 	
@@ -20,7 +20,7 @@ public class ClientMain
 		Scanner keyboard = new Scanner(System.in);
 		
 		Board board=new Board();
-		Move m;
+		Move m=new Move(3,4);
 		DisplayScreenV_AI ds = new DisplayScreenV_AI(board);
 		int mode = 0;
 		
@@ -135,7 +135,7 @@ public class ClientMain
 							}
 							else if(comFromServer.getCommand()==Command_From_Server.FAILED_MOVE)
 							{
-								System.out.println("Your AI failed to provide a valid move!!!");
+								System.out.println("Your AI failed to provide a valid move!!! X:"+m.getX()+" Z:"+m.getZ());
 								Thread.sleep(moveSleepTime);
 								
 							}

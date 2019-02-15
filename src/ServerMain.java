@@ -8,7 +8,6 @@ public class ServerMain
         try
         {
             ServerSocket serverSocket = new ServerSocket(8003);
-            System.out.println("aaa");
             while(true)
             {
 
