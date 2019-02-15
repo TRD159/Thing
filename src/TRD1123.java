@@ -130,6 +130,31 @@ class BoardScorer {
         int trigger=3;
         Location l= new Location(x,y,z);
         this.board=board.getBoard();
+        ArrayList<Integer> scores=null;
+        ArrayList<Object> methodsNew;
+        Object[]params={new Location(x, y, z), letter, 1};
+
+        try {
+            className=Class.forName("BoardScorer");
+            Object boardScore = className.newInstance();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<Method> methods = new ArrayList<Method>();
+        for (int c = 0; c < BoardGrader.class.getDeclaredMethods().length; c++) {
+            if (BoardGrader.class.getDeclaredMethods()[c].getReturnType().getName().contains("int")) {
+                {
+                    methods.add(BoardGrader.class.getDeclaredMethods()[c]);
+                }
+            }
+        }
+        try {
+           for (Method m : methods) {
+                scores.add((Integer) (m.invoke(className, params)));
+           }
+        }catch(Exception e) {e.printStackTrace();}
+
 
 
         if((checkXP(l,letter,1))>trigger) {
