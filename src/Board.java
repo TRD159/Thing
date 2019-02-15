@@ -535,6 +535,8 @@ public class Board
 
     public boolean isFull(Move m)
     {
+        if(m.getX() >= X_SIZE || m.getZ() >= Z_SIZE)
+            System.out.println(m.getX() + " " + m.getZ());
         return board[m.getZ()][0][m.getX()] != '-';
     }
 

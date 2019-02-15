@@ -54,9 +54,15 @@ public class TRD1123 extends Player {
             for (int y = 0; y < Y_SIZE; y++) {
                 for (int z = 0; z<Z_SIZE; z++) {
                     tempMove=b.score(board, opponentLetter, x,y,z, letter);
-                    if(tempMove!=null&&!board.isFull(tempMove)) {
-                        bestMove=tempMove;
+
+                    try {
+                        if (tempMove != null && !board.isFull(tempMove)) {
+                            bestMove = tempMove;
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
 
                     if(bestMove==null) {
                         System.out.println("bestMove is null.");
@@ -127,10 +133,11 @@ class BoardScorer {
     }
 
     public Move score(Board board, char letter, int x, int y, int z, char opponentLetter) {
-        int trigger=3;
+        int trigger=1;
         Location l= new Location(x,y,z);
         this.board=board.getBoard();
-        ArrayList<Integer> scores=null;
+        ArrayList<Integer> scores=new ArrayList<Integer>();
+        int highestScore=0;
         ArrayList<Object> methodsNew;
         Object[]params={new Location(x, y, z), letter, 1};
 
@@ -141,7 +148,7 @@ class BoardScorer {
             e.printStackTrace();
         }
 
-        ArrayList<Method> methods = new ArrayList<Method>();
+        /*ArrayList<Method> methods = new ArrayList<Method>();
         for (int c = 0; c < BoardGrader.class.getDeclaredMethods().length; c++) {
             if (BoardGrader.class.getDeclaredMethods()[c].getReturnType().getName().contains("int")) {
                 {
@@ -153,98 +160,143 @@ class BoardScorer {
            for (Method m : methods) {
                 scores.add((Integer) (m.invoke(className, params)));
            }
-        }catch(Exception e) {e.printStackTrace();}
+        }catch(Exception e) {e.printStackTrace();}*/
+        scores.add(checkXP(l,letter,1));
+        scores.add(checkYP(l,letter,1));
+        scores.add(checkXM(l,letter,1));
+        scores.add(checkZM(l,letter,1));
+        scores.add(checkZP(l,letter,1));
+        scores.add(checkYPZP(l,letter,1));
+        scores.add(checkYP(l,letter,1));
+        scores.add(checkYPZM(l,letter,1));
+        scores.add(checkYPZP(l,letter,1));
+        scores.add(checkZPXP(l,letter,1));
+        scores.add(checkZPXM(l,letter,1));
+        scores.add(checkYPXP(l,letter,1));
+        scores.add(checkYMXP(l,letter,1));
+        scores.add(checkYMZP(l,letter,1));
+        scores.add(checkYMZPXP(l,letter,1));
+        scores.add(checkYPZMXP(l,letter,1));
+        scores.add(checkYPZPXM(l,letter,1));
+        scores.add(checkYPZPXP(l,letter,1));
 
+        Collections.sort(scores);
 
-
-        if((checkXP(l,letter,1))>trigger) {
+        if(scores.get(scores.size()-1)<2) {
+            return null;
+        }
+        
+        highestScore=scores.get(scores.size()-1);
+        
+        
+        
+        
+        if((checkXP(l,letter,1))==highestScore) {
             if(l.x+(checkXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y][l.x+(checkXP(l,letter,1))]=='-') {
+                System.out.println("**a");
                 return new Move(l.x+(checkXP(l,letter,1)),l.z);
             }
         }
-        if((checkXM(l,letter,1))>trigger) {
+        if((checkXM(l,letter,1))==highestScore) {
             if(l.x-(checkXM(l,letter,1))>=0&&board.getBoard()[l.z][l.y][l.x-(checkXM(l,letter,1))]=='-') {
+                System.out.println("**b x:"+l.x+"-"+checkXM(l,letter,1)+ z:"+l.z+"");
                 return new Move(l.x-(checkXM(l,letter,1)),l.z);
             }
         }
-        if(checkYP(l,letter,1)>trigger) {
+        if(checkYP(l,letter,1)==highestScore) {
             if(l.y+(checkYP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYP(l,letter,1))][l.x]=='-') {
+                System.out.println("**c");
                 return new Move(l.x,l.z);
             }
         }
-        if((checkYM(l,letter,1))>trigger) {
+        if((checkYM(l,letter,1))==highestScore) {
             if(l.y-(checkYM(l,letter,1))>=0&&board.getBoard()[l.z][l.y-(checkYM(l,letter,1))][l.x]=='-') {
+                System.out.println("**D  x:"+l.x+" z:"+l.z);
                 return new Move(l.x,l.z);
             }
         }
-        if((checkZP(l,letter,1))>trigger) {
+        if((checkZP(l,letter,1))==highestScore) {
             if(l.z+(checkZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkZP(l,letter,1))][l.y][l.x]=='-') {
+                System.out.println("**E");
                 return new Move(x,z+(checkZP(l,letter,1)));
             }
         }
-        if((checkZM(l,letter,1))>trigger) {
+        if((checkZM(l,letter,1))==highestScore) {
             if(l.z-(checkZM(l,letter,1))>=0&&board.getBoard()[l.z-(checkZM(l,letter,1))][l.y][l.x]=='-') {
+                System.out.println("**F x:"+l.x+" z:"+l.z+"+"+checkZM(l,letter,1));
                 return new Move(x,z-(checkZM(l,letter,1)));
             }
 
         }
-        if((checkYPZP(l,letter,1))>trigger) {
+        if((checkYPZP(l,letter,1))==highestScore) {
             if(l.z+(checkYPZP(l,letter,1))<Z_SIZE&&l.y+(checkYPZP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z+(checkYPZP(l,letter,1))][l.y+(checkYPZP(l,letter,1))][l.x]=='-') {
+                System.out.println("**G");
                 return new Move(x, l.z+(checkYPZP(l,letter,1)));
             }
         }
-        if((checkYPZM(l,letter,1))>trigger) {
+        if((checkYPZM(l,letter,1))==highestScore) {
             if (l.y + (checkYPZM(l, letter, 1)) < Y_SIZE && l.z - (checkYPZM(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZM(l,letter,1))][l.y+(checkYPZM(l,letter,1))][l.x]=='-') {
+                System.out.println("**H");
                 return new Move(x,z+l.z-(checkYPZM(l,letter,1)));
             }
         }
-        if((checkZPXP(l,letter,1))>trigger) {
+        if((checkZPXP(l,letter,1))==highestScore) {
             if(l.z+(checkZPXP(l,letter,1))<Z_SIZE&&l.x+(checkZPXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z+(checkZPXP(l,letter,1))][l.y][l.x+(checkZPXP(l,letter,1))]=='-') {
+                System.out.println("**I");
                 return new Move(x+(checkZPXP(l,letter,1)),z+(checkZPXP(l,letter,1)));
             }
         }
-        if((checkZPXM(l,letter,1))>trigger) {
+        if((checkZPXM(l,letter,1))==highestScore) {
             if(l.z+(checkZPXM(l,letter,1))<Z_SIZE&&l.x-(checkZPXM(l,letter,1))>=0&&board.getBoard()[l.z+(checkZPXM(l,letter,1))][l.y][l.x-(checkZPXM(l,letter,1))]=='-') {
+                System.out.println("**J");
                 return new Move(x-(checkZPXM(l,letter,1)),z+(checkZPXM(l,letter,1)));
             }
         }
-        if((checkYPXP(l,letter,1))>trigger) {
+        if((checkYPXP(l,letter,1))==highestScore) {
             if(l.x+(checkYPXP(l,letter,1))<X_SIZE&&l.y+(checkYPXP(l,letter,1))<Y_SIZE&&board.getBoard()[l.z][l.y+(checkYPXP(l,letter,1))][l.x+(checkYPXP(l,letter,1))]=='-') {
+                System.out.println("**K");
                 return new Move(l.x+(checkYPXP(l,letter,1)),z);
             }
         }
-        if((checkYMXP(l,letter,1))>trigger) {
+        if((checkYMXP(l,letter,1))==highestScore) {
             if(l.y-(checkYMXP(l,letter,1))>=0&&l.x+(checkYMXP(l,letter,1))<X_SIZE&&board.getBoard()[l.z][l.y-(checkYMXP(l,letter,1))][l.x+(checkYMXP(l,letter,1))]=='-') {
+                System.out.println("**L");
                 return new Move(l.x+(checkYMXP(l,letter,1)),l.z);
             }
         }
-        if((checkYMZP(l,letter,1))>trigger) {
+        if((checkYMZP(l,letter,1))==highestScore) {
             if(l.y-(checkYMZP(l,letter,1))>=0&&l.z+(checkYMZP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]=='-') {
+                System.out.println("**m x"+l.x+"z"+l.z+ " + "+(checkYMZP(l,letter,1)));
                 return new Move(l.x,l.z+(checkYMZP(l,letter,1)));
             }
         }
-        if ((checkYMZM(l,letter,1))>trigger) {
+        if ((checkYMZM(l,letter,1))==highestScore) {
             if(l.y-(checkYMZP(l,letter,1))>=0&&l.z-(checkYMZP(l,letter,1))>=0&&board.getBoard()[l.z-(checkYMZP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x]=='-') {
+                System.out.println("**N");
                 return new Move(l.x,l.z-(checkYMZP(l,letter,1)));
             }
         }
-        if((checkYMZPXP(l,letter,1))>trigger) {
+        if((checkYMZPXP(l,letter,1))==highestScore) {
             if(l.x+(checkYMZPXP(l,letter,1))<X_SIZE&&l.y-(checkYMZPXP(l,letter,1))>=0&&l.z+(checkYMZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYMZPXP(l,letter,1))][l.y-(checkYMZPXP(l,letter,1))][l.x+(checkYMZPXP(l,letter,1))]=='-') {
+                System.out.println("**O");
                 return new Move(l.x+(checkYMZPXP(l,letter,1)),l.z+(checkYMZPXP(l,letter,1)));
             }
         }
-        if((checkYPZMXP(l,letter,1))>trigger) {
+        if((checkYPZMXP(l,letter,1))==highestScore) {
             if (l.x+(checkYPZMXP(l,letter,1))<X_SIZE&&l.y + (checkYPZMXP(l, letter, 1)) < Y_SIZE && l.z - (checkYPZMXP(l, letter, 1)) >=0 && board.getBoard()[l.z-(checkYPZMXP(l,letter,1))][l.y+(checkYPZMXP(l,letter,1))][l.x+(checkYPZMXP(l,letter,1))]=='-') {
+                System.out.println("**Q");
                 return new Move(x+(checkYPZMXP(l,letter,1)),z+l.z-(checkYPZMXP(l,letter,1)));
             }
         }
-        if((checkYPZPXM(l,letter,1))>trigger) {
+        if((checkYPZPXM(l,letter,1))==highestScore) {
             if(l.x-(checkYPZPXM(l,letter,1))>=0&&l.y+(checkYPZPXM(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXM(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXM(l,letter,1))][l.y+(checkYPZPXM(l,letter,1))][l.x-(checkYPZPXM(l,letter,1))]=='-') {
+                System.out.println("**r");
                 return new Move(l.x-(checkYPZPXM(l,letter,1)),l.z+(checkYPZPXM(l,letter,1)));
             }
         }
-        if((checkYPZPXP(l,letter,1))>trigger) {
+        if((checkYPZPXP(l,letter,1))==highestScore) {
             if(l.x+(checkYPZPXP(l,letter,1))<X_SIZE&&l.y+(checkYPZPXP(l,letter,1))<Y_SIZE&&l.z+(checkYPZPXP(l,letter,1))<Z_SIZE&&board.getBoard()[l.z+(checkYPZPXP(l,letter,1))][l.y+(checkYPZPXP(l,letter,1))][l.x+(checkYPZPXP(l,letter,1))]=='-') {
+                System.out.println("**S");
                 return new Move(l.x+(checkYPZPXP(l,letter,1)),l.z+(checkYPZPXP(l,letter,1)));
             }
         }
@@ -253,7 +305,7 @@ class BoardScorer {
     }
 
     public int checkXP(Location l, char player, int x) { //x starts off being 0
-        if(l.x==X_SIZE) {
+        if(l.x==X_SIZE - 1) {
             return x;
         }
         if(l.x < X_SIZE) {
@@ -276,7 +328,7 @@ class BoardScorer {
         return x;
     }
     public int checkYP(Location l, char player, int y) {
-        if (l.y == Y_SIZE) {
+        if (l.y == Y_SIZE - 1) {
             return y;
         }
         if (l.y < Y_SIZE) {
@@ -288,7 +340,7 @@ class BoardScorer {
     }
 
     public int checkYPZP(Location l, char player, int y) {
-        if (l.y == Y_SIZE||l.z==Z_SIZE) {
+        if (l.y == Y_SIZE - 1||l.z==Z_SIZE - 1) {
             return y;
         }
         if (l.y < Y_SIZE && l.z <Z_SIZE&& y < 5) {
@@ -299,7 +351,7 @@ class BoardScorer {
         return y;
     }
     public int checkYMZP(Location l, char player, int y) {
-        if (l.y == 0||l.z==Z_SIZE) {
+        if (l.y == 0||l.z==Z_SIZE - 1) {
             return y;
         }
         if (l.y > 0 && l.z <Z_SIZE) {
@@ -322,7 +374,7 @@ class BoardScorer {
     }
 
     public int checkYPZM(Location l, char player, int y) {
-        if (l.y == Y_SIZE||l.z == 0) {
+        if (l.y == Y_SIZE - 1||l.z == 0) {
             return y;
         }
         if (l.y < Y_SIZE &&l.z>=0 &&y < 5) {
@@ -333,7 +385,7 @@ class BoardScorer {
         return y;
     }
     public int checkYMZPXP(Location l, char player, int y) {
-        if (l.y == 0||l.z ==Z_SIZE||l.x==X_SIZE) {
+        if (l.y == 0||l.z ==Z_SIZE - 1||l.x==X_SIZE - 1) {
             return y;
         }
         if (l.y >=0 &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
@@ -344,7 +396,7 @@ class BoardScorer {
         return y;
     }
     public int checkYPZMXP(Location l, char player, int y) {
-        if (l.y == Y_SIZE||l.z == 0||l.x==X_SIZE) {
+        if (l.y == Y_SIZE - 1||l.z == 0||l.x==X_SIZE - 1) {
             return y;
         }
         if (l.y < Y_SIZE &&l.z>=0 &&l.x<X_SIZE&&y < 5) {
@@ -355,7 +407,7 @@ class BoardScorer {
         return y;
     }
     public int checkYPZPXM(Location l, char player, int y) {
-        if (l.y == Y_SIZE||l.z == Z_SIZE||l.x==0) {
+        if (l.y == Y_SIZE - 1||l.z == Z_SIZE - 1||l.x==0) {
             return y;
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x>=0&&y < 5) {
@@ -366,7 +418,7 @@ class BoardScorer {
         return y;
     }
     public int checkYPZPXP(Location l, char player, int y) {
-        if (l.y== Y_SIZE||l.z == Z_SIZE||l.x == X_SIZE) {
+        if (l.y== Y_SIZE - 1||l.z == Z_SIZE - 1||l.x == X_SIZE - 1) {
             return y;
         }
         if (l.y < Y_SIZE &&l.z<Z_SIZE &&l.x<X_SIZE&&y < 5) {
@@ -378,7 +430,7 @@ class BoardScorer {
     }
 
     public int checkZPXP(Location l, char player, int y) {
-        if (l.z == Z_SIZE||l.x==X_SIZE) {
+        if (l.z == Z_SIZE - 1||l.x==X_SIZE - 1) {
             return y;
         }
         if (l.z < Z_SIZE &&l.x<X_SIZE&& y < 5) {
@@ -389,7 +441,7 @@ class BoardScorer {
         return y;
     }
     public int checkZPXM(Location l, char player, int y) {
-        if (l.x ==0||l.z==Z_SIZE) {
+        if (l.x ==0||l.z==Z_SIZE - 1) {
             return y;
         }
         if (l.x >=0 &&l.z<Z_SIZE &&y < 5) {
@@ -401,7 +453,7 @@ class BoardScorer {
     }
 
     public int checkYPXP(Location l, char player, int y) {
-        if (l.y == Y_SIZE||l.x==X_SIZE) {
+        if (l.y == Y_SIZE||l.x==X_SIZE - 1) {
             return y;
         }
         if (l.y < Y_SIZE &&l.x<X_SIZE &&y < 5) {
@@ -414,7 +466,7 @@ class BoardScorer {
 
 
     public int checkYMXP(Location l, char player, int y) {
-        if (l.y == 0||l.x==X_SIZE) {
+        if (l.y == 0||l.x==X_SIZE - 1) {
             return y;
         }
         if (l.y >=0 &&l.x<X_SIZE&& y < 5) {
@@ -428,7 +480,7 @@ class BoardScorer {
 
 
     public int checkYM(Location l, char player, int y) {
-        if(l.y==Y_SIZE) {
+        if(l.y==Y_SIZE - 1) {
             return y;
         }
         if(l.y >= 0 && y < 5) {
@@ -440,7 +492,7 @@ class BoardScorer {
         return y;
     }
     public int checkZP(Location l, char player, int z) {
-        if(l.z==Z_SIZE) {
+        if(l.z==Z_SIZE - 1) {
             return z;
         }
         if(l.z < Z_SIZE && z < 5) {
@@ -456,7 +508,7 @@ class BoardScorer {
         }
         if (l.z >= 0 && z < 5) {
             if (board[l.z][l.y][l.x] == player) {
-                return   checkZM(cL(l, 0, 0, -1), player, ++z);
+                return  checkZM(cL(l, 0, 0, -1), player, ++z);
             }
         }
         return z;
